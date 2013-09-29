@@ -1,12 +1,27 @@
 {% load cms_tags sekizai_tags %}
 <html>
-  <head>
-      {% render_block "css" %}
-  </head>
-  <body>
-      {% cms_toolbar %}
-      {% placeholder base_content %}
-      {% block base_content %}{% endblock %}
-      {% render_block "js" %}
-  </body>
+
+<head>
+    {% render_block "css" %}
+    <title> {%block title%} The Sho(w) Mainpage {% endblock %} </title>
+</head>
+
+<body>
+
+{% addtoblock "css"%}
+<link rel="stylesheet" type="text/css" href="/media/css/basepage.css"/>
+{% endaddtoblock %}
+<div id="pagecontent">
+
+    {% cms_toolbar %}
+    {% block banner %}{% endblock %}
+    {% placeholder base_content %}
+    {% block base_content %}{% endblock %}
+    {% block trail_content %}{% endblock %}
+    {% render_block "js" %}
+
+</div>
+
+</body>
+
 </html>

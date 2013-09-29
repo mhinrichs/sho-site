@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load cms_tags sekizai_tags %}
+
+{% block banner%}
+<div id="banner"> {% placeholder banner_content %} </div>
+{% endblock %}
+
+{% block base_content %}
+
+{% addtoblock "css" %}
+<link rel="stylesheet" type="text/css" href="/media/css/landing.css"/>
+{% endaddtoblock %}
+
+<div id="upperleft"> {% placeholder upper_left_content %} </div>
+<div id="upperright"> {% placeholder upper_right_content %} </div>
+<div id="lowerleft"> {% placeholder lower_left_content %} </div>
+<div id="lowerright"> {% placeholder lower_right_content %} </div>
+
+{% endblock %}

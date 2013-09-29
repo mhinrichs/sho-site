@@ -37,7 +37,7 @@ TIME_ZONE = 'Asia/Tokyo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja-jp'
 
 SITE_ID = 1
 
@@ -143,12 +143,12 @@ TEMPLATE_DIRS = (
 CMS_TEMPLATES = (
     ('template_1.html', 'Template One'),
     ('template_2.html', 'Template Two'),
+    ('landing.html', 'Landing Template'),
 )
 
 # CMS Languages
 LANGUAGES = [
-    ('en', 'English'),
-    ('jp', 'Japanese'),
+    ('ja', 'Japanese'),
 ]
 
 INSTALLED_APPS = (
