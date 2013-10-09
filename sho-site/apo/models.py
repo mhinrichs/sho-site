@@ -43,19 +43,6 @@ class Customer(Person):
 
     birthday = models.DateField(blank=True)
 
-class TimeBlock(models.Model):
-
-    ''' A block of time for a Workday schedule '''
-
-    name = models.ForeignKey(Workday)
-    time_start = models.TimeField()
-    time_finish = models.TimeField()
-    is_booked = models.BooleanField(default = False)
-    booked_by = models.ForeignKey(Customer, null=True, blank=True)
-
-    def __str__(self):
-        return str(self.time_start) + "-" + str(self.time_finish)
-
 class Workday(models.Model):
 
     store = models.ForeignKey(Store)
@@ -87,15 +74,17 @@ class Workday(models.Model):
     def to_string(self):
         return self.date.strftime("%Y %m %d")
 
+class TimeBlock(models.Model):
 
+    ''' A block of time for a Workday schedule '''
 
+    name = models.ForeignKey(Workday)
+    time_start = models.TimeField()
+    time_finish = models.TimeField()
+    is_booked = models.BooleanField(default = False)
+    booked_by = models.ForeignKey(Customer, null=True, blank=True)
 
-
-
-
-
-
-
-
+    def __str__(self):
+        return str(self.time_start) + "-" + str(self.time_finish)
 
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apo.models import Store, Employee, Customer, WorkdayTemplate, TimeBlock, Workday
+from apo.models import Store, Employee, Customer, TimeBlock, Workday
 import datetime
 from django.utils import timezone
 
@@ -50,6 +50,7 @@ class WorkdayAdmin(admin.ModelAdmin):
     list_filter = ['date']
 
 admin.site.register(Workday, WorkdayAdmin)
+
 
 
 
