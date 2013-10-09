@@ -43,50 +43,56 @@ class Customer(Person):
 
     birthday = models.DateField(blank=True)
 
-class Schedule(models.Model):
+class WorkdayTemplate(models.Model):
 
     ''' Schedule template for working hours
-        Blocks of time are linked to the schedule.
+        TimeBlocks linked to the schedule are generic
+        blocks of time  that will be dupicated into the
+        individual workdays.
+
         Customers can in turn be connected to blocks
-        whe they make an appointment. '''
+        when they make an appointment. '''
 
     name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
 
-class Block(models.Model):
+class TimeBlock(models.Model):
 
     ''' A block of time for schedule. '''
 
-    name = models.ForeignKey(Schedule)
+    name = models.ForeignKey(WorkdayTemplate)
     time_start = models.TimeField()
     time_finish = models.TimeField()
     is_booked = models.BooleanField(default = False)
     booked_by = models.ForeignKey(Customer, null=True, blank=True)
 
     def __str__(self):
-        return str(time_start) + "-" + str(time_finish)
+        return str(self.time_start) + "-" + str(self.time_finish)
 
-class WorkDay(models.Model):
+class Workday(models.Model):
 
     store = models.ForeignKey(Store)
     employee = models.ForeignKey(Employee)
     date = models.DateField()
-    schedule = models.ForeignKey(Schedule)
+    template = models.ForeignKey(WorkdayTemplate)
+
+    def __str__(self):
+        return self.date
 
     @classmethod
-    def by_emp_id(self, emp_id):
-        return WorkDay.objects.filter(employee__emp_id__iexact = emp_id)
+    def by_emp_id(self, employee_id):
+        return Workday.objects.filter(employee__emp_id__iexact = employee_id)
 
     @classmethod
     def by_year_month(self, dateobject):
-        return WorkDay.objects.filter(date__year = dateobject.year)\
+        return Workday.objects.filter(date__year = dateobject.year)\
                .filter(date__month = dateobject.month)
 
     @classmethod
     def by_year_month_day(self, dateobject):
-        return WorkDay.objects.filter(date__year = dateobject.year)\
+        return Workday.objects.filter(date__year = dateobject.year)\
                .filter(date__month = dateobject.month)\
                .filter(date__day = dateobject.day)
 
@@ -96,6 +102,9 @@ class WorkDay(models.Model):
 
     def to_string(self):
         return self.date.strftime("%Y %m %d")
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from apo.models import Store, Employee, Customer, Schedule, Block, WorkDay
+from apo.models import Store, Employee, Customer, WorkdayTemplate, TimeBlock, Workday
 import datetime
 from django.utils import timezone
 
@@ -31,19 +31,19 @@ class CustomerAdmin(admin.ModelAdmin):
 admin.site.register(Customer, CustomerAdmin)
 
 class BlockInline(admin.TabularInline):
-    model = Block
+    model = TimeBlock
     extra = 1
     fields = ['time_start', 'time_finish']
 
-class WorkScheduleAdmin(admin.ModelAdmin):
+class TemplateScheduleAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Description', {'fields':['name']}),
         ]
     inlines = [BlockInline]
 
-admin.site.register(Schedule, WorkScheduleAdmin)
+admin.site.register(WorkdayTemplate, TemplateScheduleAdmin)
 
-class WorkDayAdmin(admin.ModelAdmin):
+class WorkdayAdmin(admin.ModelAdmin):
 
     def within_two_weeks(self):
         now = timezone.now()
@@ -55,4 +55,7 @@ class WorkDayAdmin(admin.ModelAdmin):
 
     list_filter = ['date']
 
-admin.site.register(WorkDay, WorkDayAdmin)
+admin.site.register(Workday, WorkdayAdmin)
+
+
+
