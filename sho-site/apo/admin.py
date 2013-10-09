@@ -35,15 +35,9 @@ class BlockInline(admin.TabularInline):
     extra = 1
     fields = ['time_start', 'time_finish']
 
-class TemplateScheduleAdmin(admin.ModelAdmin):
-    fieldsets = [
-        ('Description', {'fields':['name']}),
-        ]
-    inlines = [BlockInline]
-
-admin.site.register(WorkdayTemplate, TemplateScheduleAdmin)
-
 class WorkdayAdmin(admin.ModelAdmin):
+
+    inlines = [BlockInline]
 
     def within_two_weeks(self):
         now = timezone.now()
@@ -56,6 +50,7 @@ class WorkdayAdmin(admin.ModelAdmin):
     list_filter = ['date']
 
 admin.site.register(Workday, WorkdayAdmin)
+
 
 
 

@@ -43,26 +43,11 @@ class Customer(Person):
 
     birthday = models.DateField(blank=True)
 
-class WorkdayTemplate(models.Model):
-
-    ''' Schedule template for working hours
-        TimeBlocks linked to the schedule are generic
-        blocks of time  that will be dupicated into the
-        individual workdays.
-
-        Customers can in turn be connected to blocks
-        when they make an appointment. '''
-
-    name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.name
-
 class TimeBlock(models.Model):
 
-    ''' A block of time for schedule. '''
+    ''' A block of time for a Workday schedule '''
 
-    name = models.ForeignKey(WorkdayTemplate)
+    name = models.ForeignKey(Workday)
     time_start = models.TimeField()
     time_finish = models.TimeField()
     is_booked = models.BooleanField(default = False)
@@ -76,7 +61,6 @@ class Workday(models.Model):
     store = models.ForeignKey(Store)
     employee = models.ForeignKey(Employee)
     date = models.DateField()
-    template = models.ForeignKey(WorkdayTemplate)
 
     def __str__(self):
         return self.date
@@ -102,6 +86,7 @@ class Workday(models.Model):
 
     def to_string(self):
         return self.date.strftime("%Y %m %d")
+
 
 
 
