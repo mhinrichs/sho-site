@@ -9,7 +9,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^apo/', include('apo.urls')),
+    url(r'^shobiz/', include('shobiz.urls')),
     url(r'^', include('cms.urls')), # Must be at end of urlpatterns
 )
 
