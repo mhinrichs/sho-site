@@ -105,6 +105,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'cms.context_processors.media',
     'sekizai.context_processors.sekizai',
+    'zinnia.context_processors.version',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -157,17 +158,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django.contrib.comments',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
-    'shobiz',
+    'shobiz', #app for sho
+    #'shobizpos', #register app for sho
     'cms',
     'mptt',
     'menus',
     'south',
     'sekizai',
+    'zinnia',
+    'tagging',
+    'cmsplugin_zinnia',
     'cms.plugins.file',
     'cms.plugins.googlemap',
     'cms.plugins.link',
@@ -177,6 +183,8 @@ INSTALLED_APPS = (
     'cms.plugins.video',
     'cms.plugins.twitter',
 )
+
+#ZINNIA_ENTRY_BASE_MODEL = 'cmsplugin_zinnia.placeholder.EntryPlaceholder'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
