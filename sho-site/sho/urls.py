@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^shobiz/', include('shobiz.urls')),
     url(r'^weblog/', include('zinnia.urls')),
     url(r'^comments/', include('django.contrib.comments.urls')),
+    url(r'^rango/', include('rango.urls')),
     url(r'^', include('cms.urls')), # Must be at end of urlpatterns
 )
 
@@ -21,3 +22,4 @@ if settings.DEBUG:
         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
     url(r'', include('django.contrib.staticfiles.urls')),
 ) + urlpatterns
+

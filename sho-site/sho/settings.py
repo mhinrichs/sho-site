@@ -1,23 +1,42 @@
 # -*- coding: utf-8 -*-
+
 import os
 import local_settings as ls
 gettext = lambda s: s #This is a lambda used with Django CMS
-PROJECT_PATH = os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    (ls.admin_name, ls.admin_email),
-)
-
+ADMINS = ((ls.admin_name, ls.admin_email),)
 MANAGERS = ADMINS
 
+PROJECT_PATH = os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
+
+TEMPLATE_ROOT = os.path.join(PROJECT_PATH, 'templates')
+TEMPLATE_DIRS = (
+    TEMPLATE_ROOT,)
+CMS_TEMPLATES = ( # Templates for Django CMS
+    ('template_1.html', 'Template One'),
+    ('template_2.html', 'Template Two'),
+    ('landing.html', 'Landing Template'),
+)
+
+# Media and Static Files
+STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'staticroot')
+STATICFILES_DIRS = (
+    STATIC_PATH,
+)
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(PROJECT_PATH, "media")
+MEDIA_URL = '/media/'
+
+# Database Info
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add '', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': ls.db_name,                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': ls.db_name,
         'USER': ls.db_user,
         'PASSWORD': ls.db_pass,
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
@@ -31,13 +50,14 @@ ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
 TIME_ZONE = 'Asia/Tokyo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'ja-jp'
+LANGUAGES = [ #CMS languages
+    ('ja', 'Japanese'),
+]
 
 SITE_ID = 1
 
@@ -52,38 +72,14 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
-
-# URL prefix for static files.
-# Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
-
-# Additional locations of static files
-STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
 
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -93,10 +89,10 @@ SECRET_KEY = ls.secret_key
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
-# Added for use with Django CMS
+# Added for use with Django CMS and Zinnia
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
@@ -126,31 +122,6 @@ ROOT_URLCONF = 'sho.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'sho.wsgi.application'
-
-# Media and Static Files
-STATIC_ROOT = os.path.join(PROJECT_PATH, "static")
-STATIC_URL = "/static/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH, "media")
-MEDIA_URL = "/media/"
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, "templates"),
-)
-
-# Templates for Django CMS
-CMS_TEMPLATES = (
-    ('template_1.html', 'Template One'),
-    ('template_2.html', 'Template Two'),
-    ('landing.html', 'Landing Template'),
-)
-
-# CMS Languages
-LANGUAGES = [
-    ('ja', 'Japanese'),
-]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -182,6 +153,7 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.video',
     'cms.plugins.twitter',
+    'rango', #for practice
 )
 
 #ZINNIA_ENTRY_BASE_MODEL = 'cmsplugin_zinnia.placeholder.EntryPlaceholder'
@@ -191,6 +163,7 @@ INSTALLED_APPS = (
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -214,3 +187,4 @@ LOGGING = {
         },
     }
 }
+
