@@ -6,7 +6,8 @@ def populate():
 
     add_page(cat=python_cat,
              title="Official Python Tutorial",
-             url="http://docs.python.org/2/tutorial/")
+             url="http://docs.python.org/2/tutorial/",
+             views=30)
 
     add_page(cat=python_cat,
              title="How to Think like a Computer Scientist",
@@ -16,7 +17,8 @@ def populate():
 
     add_page(cat=django_cat,
              title="Official Django Docs",
-             url="http://docs.djangoproject.com/")
+             url="http://docs.djangoproject.com/",
+             views=1)
 
     frame_cat = add_cat("Other Frameworks", 32, 16)
 
@@ -40,5 +42,7 @@ if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sho.settings')
     from rango.models import Category, Page
     populate()
+
+
 
 
