@@ -51,7 +51,7 @@ class Workday(models.Model):
     date = models.DateField()
 
     def __unicode__(self):
-        return self.date
+        return self.to_string()
 
     @classmethod
     def by_emp_id(self, employee_id):
@@ -75,6 +75,8 @@ class Workday(models.Model):
     def to_string(self):
         return self.date.strftime("%Y %m %d")
 
+
+
 class TimeBlock(models.Model):
 
     ''' A block of time for a Workday '''
@@ -87,3 +89,6 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
+
