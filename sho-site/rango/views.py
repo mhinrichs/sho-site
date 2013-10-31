@@ -1,11 +1,10 @@
 from django.http import HttpResponse
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm
 
 def index(request):
-    context = RequestContext(request)
     category_list = Category.objects.order_by('-likes')[:5]
     pages_list = Page.objects.order_by('-views')[:5]
     context_dict = {'categories': category_list,
@@ -13,13 +12,12 @@ def index(request):
 
     for category in category_list:
         category.url = category.name.replace(' ', '_')
-    return render_to_response('rango/index.html', context_dict, context)
+    return render(request, 'rango/index.html', context_dict)
 
 def about(request):
     return HttpResponse("Rango says: Here is the about page. <a href='/rango'>Index</a>")
 
 def category(request, category_name_url):
-    context = RequestContext(request)
     category_name_url = category_name_url
     category_name = category_name_url.replace('_', ' ')
     context_dict = {}
@@ -33,10 +31,9 @@ def category(request, category_name_url):
     except Category.DoesNotExist:
         pass
     print(context_dict)
-    return render_to_response('rango/category.html', context_dict, context)
+    return render(request, 'rango/category.html', context_dict)
 
 def add_category(request):
-    context = RequestContext(request)
 
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -47,10 +44,9 @@ def add_category(request):
             print(form.errors)
     else:
         form = CategoryForm()
-    return render_to_response('rango/add_category.html', {'form': form}, context)
+    return render(request, 'rango/add_category.html', {'form': form})
 
 def add_page(request, category_name_url):
-    context = RequestContext(request)
     category_name = category_name_url
     if request.method == 'POST':
         form = PageForm(request.POST)
@@ -65,15 +61,10 @@ def add_page(request, category_name_url):
 
     else:
         form = PageForm()
+        context_dict = {'category_name_url': category_name_url,
+                    'category_name': category_name,
+                    'form': form}
+    return render(request, 'rango/add_page.html', context_dict)
 
-    return render_to_response( 'rango/add_page.html',
-                              {'category_name_url': category_name_url,
-                                'category_name': category_name, 'form': form}, context)
-
-
-
-
-
-
-
-
+def register(request):
+    pass
