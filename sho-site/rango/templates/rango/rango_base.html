@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+{% load cms_tags sekizai_tags %}
+<html>
+    {% render_block "css" %}
+    <head>
+        <title> {%block title%} Rango! {% endblock %} </title>
+    </head>
+    <body>
+
+        {% addtoblock "css"%}
+        <link rel="stylesheet" type="text/css" href="/media/css/basepage.css"/>
+        {% endaddtoblock %}
+
+        <div id="pagecontent">
+        {% block banner %}{% endblock %}
+        {% block base_content %}{% endblock %}
+        {% block trail_content %}{% endblock %}
+        {% render_block "js" %}
+        </div>
+
+    </body>
+
+</html>
