@@ -5,6 +5,7 @@ from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -14,7 +15,20 @@ def index(request):
 
     for category in category_list:
         category.url = category.name.replace(' ', '_')
-    return render(request, 'rango/index.html', context_dict)
+    response = render(request, 'rango/index.html', context_dict)
+    if request.COOKIES.has_key('visits'):
+        visits = int(request.COOKIES.get('visits'))
+    else:
+        response.set_cookie('visits', 1)
+    if request.COOKIES.has_key('last_visit'):
+        last_visit = request.COOKIES['last_visit']
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+        if (datetime.now() - last_visit_time).days > 0:
+            response.set_cookie('visits', visits+1)
+            response.set_cookie('last_visit', datetime.now())
+    else:
+        response.set_cookie('last_visit', datetime.now())
+    return response
 
 @login_required
 def user_logout(request):
@@ -126,6 +140,8 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
     else:
         return render(request, 'rango/login.html', {})
+
+
 
 
 
