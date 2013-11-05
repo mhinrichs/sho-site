@@ -34,13 +34,16 @@
     <div>
         <ul>
             {% if user.is_authenticated %}
-            <a href="/rango/logout/">Logout</a><br />
-            <a href="/rango/add_category/">Add a New Category</a><br />
+            <li><a href="/rango/logout/">Logout</a></li>
+            <li><a href="/rango/add_category/">Add a New Category</a></li>
             {% else %}
-            <a href="/rango/register/">Register</a><br />
-            <a href="/rango/login/">Login</a><br />
+            <li><a href="/rango/register/">Register</a></li>
+            <li><a href="/rango/login/">Login</a></li>
             {% endif %}
-            <a href="/rango/about/">The About Page</a><br>
+            <li><a href="/rango/about/">The About Page</a></li>
+            <li>Your last visit was: {{ last_visit }} and you have visited {{ visits}} time(s).</li>
         </ul>
     </div>
-{% endblock %}
+{% endblock %}
+
+

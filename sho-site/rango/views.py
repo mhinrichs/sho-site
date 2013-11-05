@@ -15,20 +15,20 @@ def index(request):
 
     for category in category_list:
         category.url = category.name.replace(' ', '_')
-    response = render(request, 'rango/index.html', context_dict)
-    if request.COOKIES.has_key('visits'):
-        visits = int(request.COOKIES.get('visits'))
-    else:
-        response.set_cookie('visits', 1)
-    if request.COOKIES.has_key('last_visit'):
-        last_visit = request.COOKIES['last_visit']
+    if request.session.get('visits'):
+        visits = request.session.get('visits')
+    if request.session.get('last_visit'):
+        last_visit = request.session['last_visit']
         last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
         if (datetime.now() - last_visit_time).days > 0:
-            response.set_cookie('visits', visits+1)
-            response.set_cookie('last_visit', datetime.now())
+            request.session['visits'] += 1
+            request.session['last_visit'] = datetime.now()
     else:
-        response.set_cookie('last_visit', datetime.now())
-    return response
+        request.session['last_visit'] = datetime.now()
+        request.session['visits'] = 1
+    context_dict['visits'] = request.session['visits']
+    context_dict['last_visit'] = request.session['last_visit']
+    return render(request, 'rango/index.html', context_dict)
 
 @login_required
 def user_logout(request):
@@ -140,6 +140,8 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
     else:
         return render(request, 'rango/login.html', {})
+
+
 
 
 
