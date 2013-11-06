@@ -5,29 +5,33 @@ from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, timedelta
+
+def query_visits(request):
+    if request.session.get('visits'):
+        visits = request.session.get('visits')
+    if request.session.get('last_visit'):
+        last_visit = request.session['last_visit']
+        if last_visit < (datetime.now() - timedelta(1)):
+           request.session['visits'] += 1
+    else:
+        request.session['last_visit'] = datetime.now()
+        request.session['visits'] = 1
+    results = {}
+    results['visits'] = request.session['visits']
+    results['last_visit'] = request.session['last_visit']
+    request.session['last_visit'] = datetime.now()
+
+    return results
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     pages_list = Page.objects.order_by('-views')[:5]
     context_dict = {'categories': category_list,
                     'pages': pages_list, }
-
     for category in category_list:
         category.url = category.name.replace(' ', '_')
-    if request.session.get('visits'):
-        visits = request.session.get('visits')
-    if request.session.get('last_visit'):
-        last_visit = request.session['last_visit']
-        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
-        if (datetime.now() - last_visit_time).days > 0:
-            request.session['visits'] += 1
-            request.session['last_visit'] = datetime.now()
-    else:
-        request.session['last_visit'] = datetime.now()
-        request.session['visits'] = 1
-    context_dict['visits'] = request.session['visits']
-    context_dict['last_visit'] = request.session['last_visit']
+    context_dict.update(query_visits(request))
     return render(request, 'rango/index.html', context_dict)
 
 @login_required
@@ -36,7 +40,9 @@ def user_logout(request):
     return redirect(index)
 
 def about(request):
-    return render(request, 'rango/about.html', {})
+    context_dict = {}
+    context_dict.update(query_visits(request))
+    return render(request, 'rango/about.html', context_dict)
 
 def category(request, category_name_url):
     category_name_url = category_name_url
@@ -140,6 +146,12 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
     else:
         return render(request, 'rango/login.html', {})
+
+
+
+
+
+
 
 
 

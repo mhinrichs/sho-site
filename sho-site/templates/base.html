@@ -17,6 +17,10 @@
     {% block banner %}{% endblock %}
     {% block base_content %}{% endblock %}
     {% block trail_content %}{% endblock %}
+    {% addtoblock "js" %}
+    <script src="/static/js/jquery-2.0.3.min.js' %}"></script>
+    <script src="/static/js/bootstrap.min.js' %}"></script>
+    {% endaddtoblock%}
     {% render_block "js" %}
 
 </div>
@@ -24,3 +28,4 @@
 </body>
 
 </html>
+
