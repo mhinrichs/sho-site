@@ -1,0 +1,37 @@
+{% extends "rango/rango_base.html" %}
+
+{% load static sekizai_tags %}
+
+{% block title %}Search{% endblock %}
+
+{% block base_content %}
+<div>
+    <h1>Search with Rango</h1>
+    <br/>
+
+    <div class="container-fluid">
+        <form class="form-signin span6" id="user_form" method="post" action="/rango/search/">
+            {% csrf_token %}
+            <div class="input-append">
+            <input type="text" size="40" name="query" value="" id="query"/>
+            <input class="btn btn-primary" type="submit" name="submit" value="Search"/>
+            </div>
+            <br/>
+        </form>
+        {% if result_list %}
+        <div style="clear: both;">
+            <ol>
+                {% for result in result_list %}
+                <li>
+                    <strong><a href="{{ result.link }}">{{ result.title }}</a></strong>
+                    <em>{{ result.summary }}</em>
+                </li>
+                <br/>
+                {% endfor %}
+            </ol>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

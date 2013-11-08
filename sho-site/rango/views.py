@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.shortcuts import render, redirect
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from rango.bing_search import run_query
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
@@ -129,7 +130,7 @@ def register(request):
     return render(request, 'rango/register.html', context_dict)
 
 def user_login(request):
-    context = RequestContext(request)
+    context_dict = {}
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -145,22 +146,18 @@ def user_login(request):
             print("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
     else:
-        return render(request, 'rango/login.html', {})
+        return render(request, 'rango/login.html', context_dict)
 
+def search(request):
+    result_list = []
+    context_dict = {}
 
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+            print(result_list)
+            context_dict['result_list'] = result_list
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return render(request, 'rango/search.html', context_dict)
 
