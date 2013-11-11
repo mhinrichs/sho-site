@@ -25,14 +25,25 @@ def query_visits(request):
 
     return results
 
-def index(request):
+def build_lists():
+    """ Builds page and category lists """
     category_list = Category.objects.order_by('-likes')[:5]
     pages_list = Page.objects.order_by('-views')[:5]
-    context_dict = {'categories': category_list,
-                    'pages': pages_list, }
     for category in category_list:
         category.url = category.name.replace(' ', '_')
+    result = {}
+    result['categories'] = category_list
+    result['pages'] = pages_list
+    return result
+
+def build_context_dict(request):
+    context_dict = {}
     context_dict.update(query_visits(request))
+    context_dict.update(build_lists())
+    return context_dict
+
+def index(request):
+    context_dict = build_context_dict(request)
     return render(request, 'rango/index.html', context_dict)
 
 @login_required
@@ -41,14 +52,13 @@ def user_logout(request):
     return redirect(index)
 
 def about(request):
-    context_dict = {}
-    context_dict.update(query_visits(request))
+    context_dict = build_context_dict(request)
     return render(request, 'rango/about.html', context_dict)
 
 def category(request, category_name_url):
     category_name_url = category_name_url
     category_name = category_name_url.replace('_', ' ')
-    context_dict = {}
+    context_dict = build_context_dict(request)
     context_dict['category_name'] = category_name
     context_dict['category_name_url'] = category_name_url
     try:
@@ -63,7 +73,7 @@ def category(request, category_name_url):
 
 @login_required
 def add_category(request):
-
+    context_dict = build_context_dict(request)
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
@@ -73,11 +83,13 @@ def add_category(request):
             print(form.errors)
     else:
         form = CategoryForm()
-    return render(request, 'rango/add_category.html', {'form': form})
+    context_dict['form'] = form
+    return render(request, 'rango/add_category.html', context_dict)
 
 @login_required
 def add_page(request, category_name_url):
     category_name = category_name_url
+    context_dict = build_context_dict(request)
     if request.method == 'POST':
         form = PageForm(request.POST)
         if form.is_valid():
@@ -90,9 +102,9 @@ def add_page(request, category_name_url):
             print(form.errors)
     else:
         form = PageForm()
-        context_dict = {'category_name_url': category_name_url,
-                    'category_name': category_name,
-                    'form': form}
+        context_dict['category_name_url'] = category_name_url
+        context_dict['category_name'] = category_name
+        context_dict['form'] = form
     return render(request, 'rango/add_page.html', context_dict)
 
 def register(request):
@@ -122,7 +134,7 @@ def register(request):
         profile_form = UserProfileForm()
 
     #set up the context dict!
-    context_dict = {}
+    context_dict = build_context_dict(request)
     context_dict['user_form'] = user_form
     context_dict['profile_form'] = profile_form
     context_dict['registered'] = registered
@@ -130,7 +142,7 @@ def register(request):
     return render(request, 'rango/register.html', context_dict)
 
 def user_login(request):
-    context_dict = {}
+    context_dict = build_context_dict(request)
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -150,14 +162,12 @@ def user_login(request):
 
 def search(request):
     result_list = []
-    context_dict = {}
+    context_dict = build_context_dict(request)
 
     if request.method == 'POST':
         query = request.POST['query'].strip()
         if query:
             result_list = run_query(query)
-            print(result_list)
             context_dict['result_list'] = result_list
 
-    return render(request, 'rango/search.html', context_dict)
-
+    return render(request, 'rango/search.html', context_dict)
