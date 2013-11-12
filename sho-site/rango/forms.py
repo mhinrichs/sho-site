@@ -36,15 +36,17 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ['username', 'email', 'password']
 
 class UserProfileForm(forms.ModelForm):
-    website = forms.URLField(help_text = "Please enter your website.")
-    picture = forms.ImageField(help_text = "Select a profile image.")
+    website = forms.URLField(help_text = "Please enter your website.", required=False)
+    picture = forms.ImageField(help_text = "Select a profile image.", required=False)
 
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ['website', 'picture']
+
+
 
 
 

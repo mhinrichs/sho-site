@@ -11,6 +11,7 @@
     <form class="form-signin span8" id="user_form" method="post" action="/rango/register/" enctype="multipart/form-data">
         {% csrf_token %}
         <h2 class="form-signin-heading">Sign up here</h2>
+
         {% for field in user_form.visible_fields %}
         {{ field.errors }}
         {{ field.help_text }}<br />
@@ -29,5 +30,7 @@
     </div>
 </div>
 {% endblock %}
+
+
 
 
