@@ -9,6 +9,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 
+def track_url(request, page_id): #fix redirect for invalid numbers
+    page = Page.objects.get(id = page_id)
+    page.views += 1
+    page.save()
+    return redirect(str(page.url))
+
 def query_visits(request):
     if request.session.get('visits'):
         visits = request.session.get('visits')
@@ -75,7 +81,6 @@ def category(request, category_name_url):
         context_dict['category'] = category
     except Category.DoesNotExist:
         pass
-
     return render(request, 'rango/category.html', context_dict)
 
 @login_required
@@ -181,4 +186,6 @@ def profile(request, username_url):
             context_dict['profile_website'] = user_profile.website
         if user_profile.picture:
             context_dict['profile_picture'] = user_profile.picture.url
-    return render(request, 'rango/profile.html', context_dict)
+    return render(request, 'rango/profile.html', context_dict)
+
+
