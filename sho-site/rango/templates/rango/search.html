@@ -1,16 +1,10 @@
-{% extends "rango/rango_base.html" %}
-
-{% load static sekizai_tags %}
-
-{% block title %}Search{% endblock %}
-
-{% block base_content %}
 <div>
-    <h1>Search with Rango</h1>
+    <br />
+    <h3>Not here? Try searching for it!</h3>
     <br/>
 
     <div class="container-fluid">
-        <form class="form-signin span6" id="user_form" method="post" action="/rango/search/">
+        <form class="form-signin span6" id="user_form" method="post" action="/rango/category/{{ category_name_url }}/">
             {% csrf_token %}
             <div class="input-append">
             <input type="text" size="40" name="query" value="" id="query"/>
@@ -33,5 +27,5 @@
         {% endif %}
     </div>
 </div>
-{% endblock %}
+
 

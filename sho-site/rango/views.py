@@ -61,6 +61,12 @@ def category(request, category_name_url):
     context_dict = build_context_dict(request)
     context_dict['category_name'] = category_name
     context_dict['category_name_url'] = category_name_url
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+            context_dict['result_list'] = result_list
     try:
         category = Category.objects.get(name=category_name)
         pages = Page.objects.filter(category = category)
@@ -68,7 +74,7 @@ def category(request, category_name_url):
         context_dict['category'] = category
     except Category.DoesNotExist:
         pass
-    print(context_dict)
+
     return render(request, 'rango/category.html', context_dict)
 
 @login_required
@@ -161,13 +167,10 @@ def user_login(request):
         return render(request, 'rango/login.html', context_dict)
 
 def search(request):
-    result_list = []
+
     context_dict = build_context_dict(request)
 
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            result_list = run_query(query)
-            context_dict['result_list'] = result_list
 
-    return render(request, 'rango/search.html', context_dict)
+    return render(request, 'rango/search.html', context_dict)
+
+
