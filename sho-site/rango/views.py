@@ -1,10 +1,11 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render, redirect
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from rango.bing_search import run_query
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 
@@ -166,11 +167,18 @@ def user_login(request):
     else:
         return render(request, 'rango/login.html', context_dict)
 
-def search(request):
-
+@login_required
+def profile(request, username_url):
     context_dict = build_context_dict(request)
-
-
-    return render(request, 'rango/search.html', context_dict)
-
-
+    user_profile = None
+    try:
+        user_profile = UserProfile.objects.get(user=User.objects.get(username=username_url))
+    except (UserProfile.DoesNotExist, User.DoesNotExist) as e :
+        print(e)
+    if user_profile:
+        context_dict['profile_username'] = user_profile.user.username
+        if user_profile.website:
+            context_dict['profile_website'] = user_profile.website
+        if user_profile.picture:
+            context_dict['profile_picture'] = user_profile.picture.url
+    return render(request, 'rango/profile.html', context_dict)
