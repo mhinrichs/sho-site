@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load cms_tags sekizai_tags %}
+{% load cms_tags sekizai_tags static %}
 
 <html>
     {% render_block "css" %}
@@ -7,13 +7,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% addtoblock "css"%}
         <link rel="stylesheet" type="text/css" href="/media/css/basepage.css"/>
-        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-fluid-adj.css"/>
-        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-responsive.min.css"/>
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-fluid-adj.css" %}"/>"
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-responsive.min.css" %}"/>
         {% endaddtoblock %}
         {% addtoblock "js" %}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="{% static "js/bootstrap.min.js" %}"></script>
         {% endaddtoblock %}
 
         <title> {%block title%} Rango! {% endblock %} </title>
@@ -78,6 +78,8 @@
         {% render_block "js" %}
     </footer>
 </html>
+
+
 
 
 

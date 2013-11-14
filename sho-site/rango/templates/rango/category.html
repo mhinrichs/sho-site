@@ -1,15 +1,28 @@
 {% extends "rango/rango_base.html" %}
 
+{% load sekizai_tags static %}
+
 {% block base_content %}
 
 <h1>{{ category_name }}</h1>
-        {% if category %}
-            {% if pages %}
-            <ul>
-                {% for page in pages %}
-                <li><a href="/rango/goto/{{ page.id }}/">{{ page.title }}</a></li>
-                {% endfor %}
-            </ul>
+
+<div>
+    This category has been liked <b id="like_count">{{ category.likes }}</b> time(s)
+    {% if user.is_authenticated %}
+    <button class="btn btn-mini btn-danger" id="likes" data-catid="{{ category.id }}" type="button">Like</button>
+</div>
+<br />
+{% endif %}
+{% addtoblock "js" %}
+<script src="{% static "js/rango-ajax.js" %}"></script>
+{% endaddtoblock %}
+    {% if category %}
+        {% if pages %}
+        <ul>
+            {% for page in pages %}
+            <li><a href="/rango/goto/{{ page.id }}/">{{ page.title }}</a></li>
+            {% endfor %}
+        </ul>
             {% else %}
                 <strong>There are no pages in this category.</strong><br />
             {% endif %}
@@ -25,17 +38,4 @@
 {% include "rango/search.html" %}
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
 

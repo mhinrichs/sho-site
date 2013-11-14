@@ -99,6 +99,21 @@ def add_category(request):
     return render(request, 'rango/add_category.html', context_dict)
 
 @login_required
+def like_category(request):
+    context_dict = build_context_dict(request)
+    category_id = None
+    if request.method == 'GET':
+        category_id = request.GET['category_id']
+    if category_id:
+        category= Category.objects.get(id=int(category_id))
+        if category:
+            category.likes += 1
+            category.save()
+            likes = category.likes
+    return HttpResponse(likes)
+
+
+@login_required
 def add_page(request, category_name_url):
     category_name = category_name_url
     context_dict = build_context_dict(request)
@@ -187,5 +202,7 @@ def profile(request, username_url):
         if user_profile.picture:
             context_dict['profile_picture'] = user_profile.picture.url
     return render(request, 'rango/profile.html', context_dict)
+
+
 
 
