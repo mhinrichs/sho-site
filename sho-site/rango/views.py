@@ -9,6 +9,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 
+def get_category_list(max_results=0, starts_with=''):
+    if starts_with:
+        cat_list = Category.objects.filter(name__startswith=starts_with)[:max_results]
+    else:
+        cat_list = Category.objects.all()
+
+    for cat in cat_list:
+        cat.url = cat.name.replace(' ', '_')
+    return cat_list
+
 def track_url(request, page_id): #fix redirect for invalid numbers
     page = Page.objects.get(id = page_id)
     page.views += 1
@@ -112,6 +122,15 @@ def like_category(request):
             likes = category.likes
     return HttpResponse(likes)
 
+def suggest_category(request):
+    context_dict = {}
+    cat_list = None
+    if request.method == 'GET':
+        starts_with = request.GET['suggestion']
+        cat_list = get_category_list(5, starts_with)
+    if cat_list:
+        context_dict['categories'] = cat_list
+    return render(request, 'rango/category_list.html', context_dict)
 
 @login_required
 def add_page(request, category_name_url):
@@ -202,6 +221,8 @@ def profile(request, username_url):
         if user_profile.picture:
             context_dict['profile_picture'] = user_profile.picture.url
     return render(request, 'rango/profile.html', context_dict)
+
+
 
 
 

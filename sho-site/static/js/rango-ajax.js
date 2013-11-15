@@ -6,9 +6,17 @@ $(document).ready(function() {
     $.get('/rango/like_category/', {category_id: catid}, function(data) {
       $('#like_count').html(data);
       $('#likes').hide();
+    });
+  });
+
+  $('#sug').keyup(function() {
+    var query;
+    query = $(this).val();
+    $.get('/rango/suggest_category/', {suggestion: query}, function(data) {
+      $('#cats').html(data);
 
     });
-
   });
+
 
 });

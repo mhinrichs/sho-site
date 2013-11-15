@@ -7,17 +7,11 @@
         {% endfor %}
     </ul>
 {% else %}
-    <strong>No categories at present.</strong>
+    <strong>No matching categories!</strong>
 {% endif %}
 
-{% if pages %}
-    <h2>Most Viewed Pages</h2>
-        <ul>
-        {% for page in pages %}
-            <li><a href="{{ page.url }}"> {{ page.title }}</a></li>
-        {% endfor %}
-        </ul>
-{% else %}
-    <strong>No pages at present.</strong>
-{% endif %}
-{% endblock %}
+{% endblock %}
+
+
+
+
