@@ -1,18 +1,45 @@
 # views for apo
+# -*- coding: utf-8 -*-
 
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template import Context, loader
 from django.core.urlresolvers import reverse
 from shobiz.models import Workday
-from calendar import LocaleHTMLCalendar
-import datetime as dt
+from calendar import Calendar
+from datetime import datetime
+
 
 #Setup the Locale Calendar
-cal = LocaleHTMLCalendar(6, 'jpn')
+
+
+def get_calendar(year, month):
+    cal = Calendar(6)
+    return cal.monthdatescalendar(year, month)
 
 def index(request):
     return render(request, 'shobiz/index.html')
+
+def calendar(request):
+    context_dict = {}
+    context_dict['days_of_week'] = [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
+    if request.method == 'GET':
+        if request.GET.has_key('month'):
+            d = datetime.now()
+            month = int(request.GET['month'])
+            context_dict['calendar'] = get_calendar(d.year, month)
+            context_dict['month'] = month
+            context_dict['year'] = d.year
+    else:
+        d = datetime.now()
+        context_dict['calendar'] = get_calendar(d.year, d.month)
+        context_dict['month'] = d.month
+        context_dict['year'] = d.year
+    return render(request, 'shobiz/calendar_template.html', context_dict)
+
+
+    context_dict['calendar'] = get_calendar
+    return render(request, 'shobiz/calendar.html')
 
 def time(request):
     now = dt.datetime.today()
