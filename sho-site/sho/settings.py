@@ -153,7 +153,6 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.video',
     'cms.plugins.twitter',
-    'rango', #for practice
 )
 
 #ZINNIA_ENTRY_BASE_MODEL = 'cmsplugin_zinnia.placeholder.EntryPlaceholder'
@@ -187,6 +186,8 @@ LOGGING = {
         },
     }
 }
+
+
 
 
 
