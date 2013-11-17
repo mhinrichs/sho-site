@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class StoreAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Store Information', {'fields':['name', 'romaji', 'post_code', 'address1', 'address2', 'phone', 'email' ]}),
+        ('Store Information', {'fields':['name', 'romaji', 'store_id', 'post_code', 'address1', 'address2', 'phone', 'email' ]}),
         ('Data Entry', {'fields': ['entry_date', 'last_edited', 'valid_profile'], 'classes': ['collapse']}),
         ]
 

@@ -54,19 +54,30 @@ class Workday(models.Model):
         return self.to_string()
 
     @classmethod
+    def by_store_emp_date(self, store_id, emp_id, year, month):
+        return Workday.objects.filter(store__store_id__iexact = store_id)\
+               .filter(employee__emp_id__iexact = emp_id)\
+               .filter(date__year = year)\
+               .filter(date__month = month)
+
+    @classmethod
+    def by_store_id(self, store_id):
+        return Workday.objects.filter(store__store_id__iexact = store_id)
+
+    @classmethod
     def by_emp_id(self, employee_id):
         return Workday.objects.filter(employee__emp_id__iexact = employee_id)
 
     @classmethod
-    def by_year_month(self, dateobject):
-        return Workday.objects.filter(date__year = dateobject.year)\
-               .filter(date__month = dateobject.month)
+    def by_year_month(self, year, month):
+        return Workday.objects.filter(date__year = year)\
+               .filter(date__month = month)
 
     @classmethod
-    def by_year_month_day(self, dateobject):
-        return Workday.objects.filter(date__year = dateobject.year)\
-               .filter(date__month = dateobject.month)\
-               .filter(date__day = dateobject.day)
+    def by_year_month_day(self, year, month, day):
+        return Workday.objects.filter(date__year = year)\
+               .filter(date__month = month)\
+               .filter(date__day = day)
 
     @classmethod
     def within_next_month(self):
@@ -88,6 +99,8 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
 
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% load cms_tags sekizai_tags %}
+{% load sekizai_tags %}
 <html>
 
 <head>
@@ -16,10 +16,7 @@
 
 <div id="pagecontent">
 
-    {% cms_toolbar %}
-    {% block banner %}{% endblock %}
     {% block base_content %}{% endblock %}
-    {% block trail_content %}{% endblock %}
     {% render_block "js" %}
 
 </div>

@@ -1,45 +1,23 @@
-{% load static sekizai_tags %}
-{% render_block "css" %}
 {% if calendar %}
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="hero-unit span3">
-            <!-- the instructions and calendar controls go here -->
-            Look some text!
-        </div>
-        <div class="span4">
-            <!-- The calendar goes here -->
-            <table border="2" class="table table-striped table-bordered table-condensed">
-                <tr><th colspan="7"><center>{{ month }}月</center></th></tr>
-                <tr>
-                {% for day in days_of_week %}
-                    <td><center>{{ day }}</center></td>
-                {% endfor %}
-                </tr>
-                {% for week in calendar %}
-
-            <tr class="week{{ forloop.counter}}">
-                {% for date in week %}
-                <td class="{% cycle 'sun' 'mon' 'tues' 'wednes' 'thurs' 'fri' 'satur' %}day" id="{{date.year}}-{{date.month}}-{{date.day}}"><center>{{ date.day }}</center></td>
-                {% endfor %}
-            </tr>
+<div id="monthcalendar">
+    <table border="2" class="table table-striped table-bordered table-condensed">
+        <tr><th colspan="7"><center>{{ year }}年{{ month }}月</center></th></tr>
+        <tr>
+            {% for day in days_of_week %}
+            <td><center>{{ day }}</center></td>
             {% endfor %}
-            </table>
-        <div>
-    </div>
+        </tr>
+        {% for week in calendar %}
+        <tr class="week{{ forloop.counter}}">
+            {% for date in week %}
+            <td class="{% cycle 'sun' 'mon' 'tues' 'wednes' 'thurs' 'fri' 'satur' %}day" id="{{date.year}}-{{date.month}}-{{date.day}}">
+                <center>{{ date.day }}</center>
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 {% else %}
 <strong>Oops, something went wrong!</strong>
 {% endif %}
-{% addtoblock "js" %}
-<script src="{% static "js/bootstrap.min.js"%}"></script>
-<script src="{% static "js/jquery-2.0.3.min.js"%}"></script>
-{% endaddtoblock %}
-{% addtoblock "css" %}
-<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-fluid-adj.css" %}"/>
-<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css"%}"/>
-<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-responsive.css"%}"/>
-<link rel="stylesheet" type="text/css" href="{% static "css/calendar.css"%}"/>
-{% endaddtoblock %}
-{% render_block "js" %}
