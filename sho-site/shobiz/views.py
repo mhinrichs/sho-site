@@ -10,14 +10,13 @@ from datetime import datetime
 
 #the calendar
 cal = Calendar(6)
-#helper functions
 
+#helper functions
 def get_calendar(year, month): #change me
     url = 'shobiz/calendar/?year={0}&month={1}'.format(year, month)
     return HttpResponse(url)
 
 #views
-
 def index(request):
     return render(request, 'shobiz/index.html')
 
@@ -51,3 +50,4 @@ def time(request):
     now = dt.datetime.today()
     context = {'now': now,}
     return render(request, 'shobiz/time.html', context)
+

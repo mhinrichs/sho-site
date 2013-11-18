@@ -54,11 +54,10 @@ class Workday(models.Model):
         return self.to_string()
 
     @classmethod
-    def by_store_emp_date(self, store_id, emp_id, year, month):
+    def by_store_emp_date(self, store_id, emp_id, date):
         return Workday.objects.filter(store__store_id__iexact = store_id)\
                .filter(employee__emp_id__iexact = emp_id)\
-               .filter(date__year = year)\
-               .filter(date__month = month)
+               .filter(date = date)
 
     @classmethod
     def by_store_id(self, store_id):
@@ -86,6 +85,8 @@ class Workday(models.Model):
     def to_string(self):
         return self.date.strftime("%Y %m %d")
 
+    def get_status(self):
+        return "todo_return_real_status"
 
 class TimeBlock(models.Model):
 
@@ -99,6 +100,8 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
 
 
