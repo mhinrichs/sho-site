@@ -16,6 +16,9 @@ class BaseProfile(models.Model):
     class Meta:
         abstract = True
 
+    def __unicode__(self): #all inherited objects display their name
+        return self.name
+
 class Store(BaseProfile):
 
     ''' A store location and information '''
@@ -81,6 +84,8 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
 
 

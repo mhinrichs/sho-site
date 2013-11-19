@@ -1,6 +1,6 @@
 from datetime import date
 from calendar import Calendar
-from shobiz.models import Employee, Customer, Store, Workday
+from shobiz.models import Workday
 
 class EmployeeWorkday:
 
@@ -31,9 +31,8 @@ class WorkdayCalendarMaker:
     def __init__(self, weekdaystart = 6):
         self.calendar = Calendar(weekdaystart)
 
-    def create_calendar(self, store_id, emp_id, year, month):
+    def get_calendar(self, store_id, emp_id, year, month):
         query_set = Workday.by_store_emp_year_month(store_id, emp_id, year, month)
-        print(query_set)
         calendar = []
         for week in self.calendar.monthdatescalendar(year, month):
             workweek = []
