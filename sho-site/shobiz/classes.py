@@ -14,16 +14,19 @@ class EmployeeWorkday:
     def pair_workday(self, query_set):
         for entry in query_set:
             if entry.date == self.date:
-                print("matched")
                 self.workday = entry
                 self.status = entry.get_status()
-                return self
             else:
                 self.status = 'offwork'
-        return self
+
+    def to_string(self):
+        return self.date.strftime("%Y_%m_%d") #underscores because its used as a class in django template
 
 class WorkdayCalendarMaker:
-    '''this pairs workdays with calendar from the calendar module'''
+
+    '''Pairs workdays with calendar from the calendar module.
+       The workdays are captured as a single query set to avoid hitting
+       the database more than once.'''
 
     def __init__(self, weekdaystart = 6):
         self.calendar = Calendar(weekdaystart)
@@ -38,7 +41,8 @@ class WorkdayCalendarMaker:
                 if date.month != month: #process status for other months (grayed)
                     workday = EmployeeWorkday(store_id, emp_id, date)
                 else:  #process the date and match queries from the database
-                    workday = EmployeeWorkday(store_id, emp_id, date).pair_workday(query_set)
+                    workday = EmployeeWorkday(store_id, emp_id, date)
+                    workday.pair_workday(query_set)
                 workweek.append(workday)
             calendar.append(workweek)
         return calendar
