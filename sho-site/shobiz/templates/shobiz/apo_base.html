@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 
-{% load sekizai_tags %}
+{% load static sekizai_tags %}
 <html>
 
 <head>
     {% render_block "css" %}
     <title> {%block title%} Schedule an appointment! {% endblock %} </title>
+
+    {% addtoblock "css"%}
+    <link rel="stylesheet" type="text/css" href="/media/css/basepage.css"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-fluid-adj.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-responsive.min.css" %}"/>
+
+    {% endaddtoblock %}
+
+    {% addtoblock "js" %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/less-1.5.0.min.js" %}"></script>
+    {% endaddtoblock %}
+
 </head>
 
 <body>
 
-{% addtoblock "css"%}
-<link rel="stylesheet" type="text/css" href="/media/css/basepage.css"/>
-{% endaddtoblock %}
+
 
 <div id="pagecontent">
 

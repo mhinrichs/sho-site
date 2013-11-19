@@ -48,5 +48,4 @@ class WorkdayCalendarMaker:
                 workweek.append(workday)
             calendar.append(workweek)
         return calendar
-
 
