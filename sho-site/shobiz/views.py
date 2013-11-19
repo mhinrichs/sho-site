@@ -53,6 +53,4 @@ def time(request):
     now = dt.datetime.today()
     context = {'now': now,}
     return render(request, 'shobiz/time.html', context)
-
-
 
