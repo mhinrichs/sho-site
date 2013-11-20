@@ -56,21 +56,34 @@ class Workday(models.Model):
     @classmethod
     def by_store_emp_date(self, store_id, emp_id, date):
         return Workday.objects.filter(store__store_id__iexact = store_id)\
-               .filter(employee__emp_id__iexact = emp_id)\
-               .filter(date = date)
+                              .filter(employee__emp_id__iexact = emp_id)\
+                              .filter(date = date)
 
     @classmethod
     def by_store_emp_year_month(self, store_id, emp_id, year, month):
         return Workday.objects.filter(store__store_id__iexact = store_id)\
-                     .filter(employee__emp_id__iexact = emp_id)\
-                     .filter(date__year = year)\
-                     .filter(date__month = month)
+                              .filter(employee__emp_id__iexact = emp_id)\
+                              .filter(date__year = year)\
+                              .filter(date__month = month)
 
     def to_string(self):
         return self.date.strftime("%Y %m %d")
 
     def get_status(self):
-        return "todo_return_real_status"
+        blocks = self.timeblock_set.all()
+        total = len(blocks)
+        count = float(0)
+        for block in blocks:
+            if block.is_booked:
+                count += 1
+        if count == 0 or count/total >= .5:
+            return "green"
+        elif count/total >= .2:
+            return "yellow"
+        elif count/total > 0:
+            return "orange"
+        else:
+            return "red"
 
 class TimeBlock(models.Model):
 
@@ -84,18 +97,4 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

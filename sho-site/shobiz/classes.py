@@ -13,12 +13,12 @@ class EmployeeWorkday:
 
     def pair_workday(self, query_set):
         for entry in query_set:
-            if self.status == 'dimmed':
+            if self.status == 'dimmed': #ignore records outside of the current month
                 pass
             elif entry.date == self.date:
                 self.workday = entry
                 self.status = entry.get_status()
-        if not self.status:
+        if not self.status: # None as status means no workday record / employee is off work
             self.status = 'offwork'
 
     def to_string(self):
@@ -48,4 +48,6 @@ class WorkdayCalendarMaker:
                 workweek.append(workday)
             calendar.append(workweek)
         return calendar
+
+
 
