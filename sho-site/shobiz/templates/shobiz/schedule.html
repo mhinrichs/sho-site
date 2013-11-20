@@ -1,6 +1,12 @@
 {% extends "shobiz/apo_base.html" %}
 
+{% load sekizai_tags static %}
+
 {% block base_content %}
+
+{% addtoblock "css" %}
+<link rel="stylesheet" type="text/css" href="{% static "css/workday-calendar.css" %}"/>
+{% endaddtoblock %}
 
 <div id="calendar_content">
     {% include "shobiz/calendar_template.html" %}

@@ -67,7 +67,7 @@ class Workday(models.Model):
                               .filter(date__month = month)
 
     def to_string(self):
-        return self.date.strftime("%Y %m %d")
+        return self.date.strftime("%Y_%m_%d")
 
     def get_status(self):
         blocks = self.timeblock_set.all()
