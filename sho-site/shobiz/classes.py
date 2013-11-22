@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from datetime import date
 from calendar import Calendar
 from shobiz.models import Workday
@@ -49,5 +51,6 @@ class WorkdayCalendarMaker:
             calendar.append(workweek)
         return calendar
 
-
-
+    def get_weekdays(self):
+        ''' todo optionally add weekdays for non japan regions '''
+        return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]

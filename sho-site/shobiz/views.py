@@ -23,9 +23,11 @@ def index(request):
 
 def calendar(request):
     now = datetime.now()
+    year, month = now.year, now.month
     context_dict = {}
-    context_dict['days_of_week'] = [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
-    context_dict['current_year'] = now.year
+    context_dict['year'] = year
+    context_dict['month'] = month
+    context_dict['days_of_week'] = workdaycal.get_weekdays()
 
     if all(key in request.GET for key in ('store_id','emp_id','year','month')):
         store_id = request.GET['store_id']
@@ -36,16 +38,18 @@ def calendar(request):
         context_dict['month'] = month
         context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, year, month)
     else:
-        context_dict['year'] = now.year
-        context_dict['month'] = now.month
-        context_dict['calendar'] = workdaycal.get_calendar("theshow", "sho", now.year, now.month)
+        store_id = "s01" #default store and employee
+        emp_id = "e01" #will be replaced later if employee > 1
+        context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, year, month)
     return render(request, 'shobiz/calendar_template.html', context_dict)
 
+#this is just for testing and is basically the same as above
 def schedule(request, store_id, emp_id, year, month):
     context_dict = {}
     year, month = int(year), int(month)
     context_dict['year'] = year
     context_dict['month'] = month
+    context_dict['days_of_week'] = workdaycal.get_weekdays()
     context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, year, month)
     return render(request, 'shobiz/schedule.html', context_dict)
 

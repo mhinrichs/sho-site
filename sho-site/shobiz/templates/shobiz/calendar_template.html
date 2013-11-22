@@ -10,7 +10,7 @@
         {% for week in calendar %}
         <tr class="week{{ forloop.counter }}">
             {% for workday in week %}
-            <td class="{% cycle 'sun' 'mon' 'tues' 'wednes' 'thurs' 'fri' 'satur' %}day {{ workday.status }}" id="{{ workday.to_string }}">
+            <td class="{% cycle 'sun' 'mon' 'tues' 'wednes' 'thurs' 'fri' 'satur' %}day {{ workday.status }}  active" id="{{ workday.to_string }}">
                 <center>{{ workday.date.day }}</center>
             </td>
             {% endfor %}
@@ -21,6 +21,8 @@
 {% else %}
 <strong>Oops, something went wrong!</strong>
 {% endif %}
+
+
 
 
 
