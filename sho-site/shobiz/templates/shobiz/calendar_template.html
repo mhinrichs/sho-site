@@ -1,6 +1,6 @@
 {% if calendar %}
-<div id="monthcalendar">
-    <table border="2" class="table table-bordered table-condensed">
+<div class="table-responsive">
+    <table border="2" class="table table-bordered">
         <tr><th colspan="7"><center>{{ year }}年{{ month }}月</center></th></tr>
         <tr>
             {% for day in days_of_week %}
@@ -21,4 +21,6 @@
 {% else %}
 <strong>Oops, something went wrong!</strong>
 {% endif %}
+
+
 

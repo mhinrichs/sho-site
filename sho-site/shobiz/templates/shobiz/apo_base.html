@@ -9,7 +9,6 @@
 
     {% addtoblock "css"%}
     <link rel="stylesheet" type="text/css" href="/media/css/basepage.css"/>
-    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-fluid-adj.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-responsive.min.css" %}"/>
     {% endaddtoblock %}
@@ -25,7 +24,7 @@
 
 
 
-<div id="pagecontent">
+<div class="container">
 
     {% block base_content %}{% endblock %}
     {% render_block "js" %}
@@ -36,3 +35,4 @@
 
 </html>
 
+
