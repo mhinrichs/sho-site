@@ -1,7 +1,7 @@
 from django.contrib import admin
 from shobiz.models import Store, Employee, Customer, TimeBlock, Workday
-import datetime
 from django.utils import timezone
+import datetime
 
 class StoreAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -55,3 +55,4 @@ admin.site.register(Workday, WorkdayAdmin)
 
 
 
+

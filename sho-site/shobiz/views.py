@@ -21,6 +21,7 @@ def get_calendar(year, month): #change me
 def index(request):
     return render(request, 'shobiz/index.html')
 
+# Just for testing real view is belows
 def calendar(request):
     now = datetime.now()
     year, month = now.year, now.month
@@ -43,12 +44,12 @@ def calendar(request):
         context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, year, month)
     return render(request, 'shobiz/calendar_template.html', context_dict)
 
-#this is just for testing and is basically the same as above
 def schedule(request, store_id, emp_id, year, month):
     context_dict = {}
     year, month = int(year), int(month)
     context_dict['year'] = year
     context_dict['month'] = month
+    #context_dict['employee'] = Employee.get_employee_method_here()
     context_dict['days_of_week'] = workdaycal.get_weekdays()
     context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, year, month)
     return render(request, 'shobiz/schedule.html', context_dict)
@@ -57,4 +58,6 @@ def time(request):
     now = dt.datetime.today()
     context = {'now': now,}
     return render(request, 'shobiz/time.html', context)
+
+
 

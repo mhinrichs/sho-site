@@ -1,4 +1,5 @@
 from django.db import models
+import shobiz.validators as validate
 
 class BaseProfile(models.Model):
     name = models.CharField(max_length=30)
@@ -19,11 +20,6 @@ class BaseProfile(models.Model):
     def __unicode__(self): #all inherited objects display their name
         return self.name
 
-class Store(BaseProfile):
-
-    ''' A store location and information '''
-    store_id = models.CharField(max_length=5)
-
 class Person(BaseProfile):
 
     lastname = models.CharField(max_length=30, blank = False)
@@ -31,12 +27,28 @@ class Person(BaseProfile):
     class Meta:
         abstract = True
 
+class Store(BaseProfile):
+
+    ''' A store location and information '''
+
+    store_id = models.CharField(max_length=5, unique=True, validators=[validate.valid_store_id])
+
 class Employee(Person):
 
-    ''' An employee '''
+    ''' Employee represents an employee record.
+        An employee may be contracted to work at many
+        different stores but his calendar lookups will
+        return only his workdays / timeblocks for the
+        store that the customer specifies.'''
 
-    emp_id = models.CharField(max_length=5)
+    # fields
+    emp_id = models.CharField(max_length=7, unique=True, validators=[validate.valid_emp_id])
     birthday = models.DateField(blank=False)
+
+    # object filters
+    @classmethod
+    def by_store_id_emp_id(self, store_id, emp_id):
+        return Employee.objects.filter(emp_id = emp_id)
 
 class Customer(Person):
 
@@ -46,8 +58,8 @@ class Customer(Person):
 
 class Workday(models.Model):
 
-    store = models.ForeignKey(Store)
     employee = models.ForeignKey(Employee)
+    store = models.ForeignKey(Store)
     date = models.DateField()
 
     def __unicode__(self):
@@ -97,4 +109,6 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
