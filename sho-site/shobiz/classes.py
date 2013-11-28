@@ -53,4 +53,6 @@ class WorkdayCalendarMaker:
 
     def get_weekdays(self):
         ''' todo optionally add weekdays for non japan regions '''
-        return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
+        return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
+
+

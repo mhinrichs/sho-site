@@ -5,29 +5,26 @@
 
 <head>
     {% render_block "css" %}
-    <title> {%block title%} Schedule an appointment! {% endblock %} </title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% addtoblock "css"%}
-    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
-    {% endaddtoblock %}
+  <title> {%block title%} Schedule an appointment! {% endblock %} </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% addtoblock "css"%}
+  <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+  {% endaddtoblock %}
 
-    {% addtoblock "js" %}
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
-    {% endaddtoblock %}
+  {% addtoblock "js" %}
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="{% static "js/bootstrap.min.js" %}"></script>
+  {% endaddtoblock %}
 
 </head>
 
 <body>
 
-<div class="container">
+  {% block base_content %}{% endblock %}
 
-    {% block base_content %}{% endblock %}
+  {% render_block "js" %}
 
-</div>
-
-{% render_block "js" %}
 </body>
 
 </html>
