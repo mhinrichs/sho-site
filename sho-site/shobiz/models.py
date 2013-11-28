@@ -47,7 +47,7 @@ class Employee(Person):
 
     # object filters
     @classmethod
-    def by_store_id_emp_id(self, store_id, emp_id):
+    def by_emp_id(self, store_id, emp_id): #unused for now
         return Employee.objects.filter(emp_id = emp_id)
 
 class Customer(Person):
@@ -109,6 +109,8 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
 
 

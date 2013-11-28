@@ -49,7 +49,7 @@ def schedule(request, store_id, emp_id, year, month):
     year, month = int(year), int(month)
     context_dict['year'] = year
     context_dict['month'] = month
-    #context_dict['employee'] = Employee.get_employee_method_here()
+    context_dict['employee'] = Employee.objects.get(emp_id=emp_id)
     context_dict['days_of_week'] = workdaycal.get_weekdays()
     context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, year, month)
     return render(request, 'shobiz/schedule.html', context_dict)
@@ -58,6 +58,8 @@ def time(request):
     now = dt.datetime.today()
     context = {'now': now,}
     return render(request, 'shobiz/time.html', context)
+
+
 
 
 
