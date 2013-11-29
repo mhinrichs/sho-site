@@ -37,14 +37,17 @@ def schedule(request):
             store_id = request.GET['store_id']
             emp_id = request.GET['emp_id']
             date = encode_datestr(request.GET['date'])
+            workday = Workday.by_store_emp_date(store_id, emp_id, date)
             context_dict['year'] = date.year
             context_dict['month'] = date.month
-            context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, date.year, date.month)
+            context_dict['workday'] = workday
         except ValueError:
-            return HttpResponseRedirect("http://www.google.com")
+            return HttpResponse("schedule problem")
     else:
-        return HttpResponse("Schedule lacking params")
-    return render(request, 'shobiz/calendar_template.html', context_dict)
+        #Just because I dont feel like typing the full info every time
+        url = '?store_id=s0001&emp_id=e000001&date=2014_11_26'
+        return HttpResponseRedirect(url)
+    return render(request, 'shobiz/schedule.html', context_dict)
 
 def calendar(request, store_id, emp_id, year, month):
     try:
@@ -60,13 +63,8 @@ def calendar(request, store_id, emp_id, year, month):
     return render(request, 'shobiz/calendar.html', context_dict)
 
 def time(request):
-    now = dt.datetime.today()
-    context = {'now': now}
+    now = datetime.today()
+    context = {'now': now,
+               'link': 'http://localhost:8000/shobiz/schedule/?store_id=s0001&emp_id=e000001&date=2014_11_26'}
     return render(request, 'shobiz/time.html', context)
-
-
-
-
-
-
 

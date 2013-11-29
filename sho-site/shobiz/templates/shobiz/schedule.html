@@ -1,0 +1,45 @@
+{% extends "shobiz/apo_base.html" %}
+
+{% load sekizai_tags static %}
+
+{% block base_content %}
+
+{% addtoblock "css" %}
+<link rel="stylesheet" type="text/css" href="{% static "css/schedule.css" %}"/>
+{% endaddtoblock %}
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="jumbotron">
+          <h1>Book an appointment with {{ employee.name }}</h1>
+          <p>Choose the time for your appointment below.</p>
+          <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-1">
+        <div id="dateinfo">
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div id="timetable">
+          {% if workday %}
+          <p>{{ workday.date.year }}-{{ workday.date.month }}-{{ workday.date.day }}</p>
+          {% for timeblock in workday.timeblock_set.all %}
+          <div class="col-xl-12 timeblock">{{ timeblock }} {{ timeblock.start_time }}-{{ timeblock.end_time }}: Booked = {{timeblock.is_booked}}</div>
+          {% endfor %}
+          {%else%}
+          <p>Sorry {{ employee.name }} doesn't work on the date you selected</p>
+          {% endif %}
+        </div>
+      </div> <!--rightcol-->
+    </div> <!--outerrow-->
+  </div> <!--container-->
+
+{% endblock %}

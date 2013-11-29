@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 import shobiz.validators as validate
 
@@ -67,12 +69,18 @@ class Workday(models.Model):
 
     @classmethod
     def by_store_emp_date(self, store_id, emp_id, date):
+        ''' Returns the first object in the queryset
+            that matches all params. '''
         return Workday.objects.filter(store__store_id__iexact = store_id)\
                               .filter(employee__emp_id__iexact = emp_id)\
-                              .filter(date = date)
+                              .filter(date = date)[0]
 
     @classmethod
     def by_store_emp_year_month(self, store_id, emp_id, year, month):
+        ''' Returns a queryset that contains all workdays
+            for a given month.  Used by Calendar class to build
+            a Workday Calendar.  Prefetches timeblock data for use
+            in building a schedule. '''
         return Workday.objects.filter(store__store_id__iexact = store_id)\
                               .filter(employee__emp_id__iexact = emp_id)\
                               .filter(date__year = year)\
@@ -82,6 +90,7 @@ class Workday(models.Model):
         return self.date.strftime("%Y_%m_%d")
 
     def get_status(self):
+        ''' returns busy status of a workday '''
         blocks = self.timeblock_set.all()
         total = len(blocks)
         count = float(0)
@@ -109,8 +118,4 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
-
-
-
-
 
