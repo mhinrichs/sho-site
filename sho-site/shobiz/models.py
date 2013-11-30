@@ -70,10 +70,14 @@ class Workday(models.Model):
     @classmethod
     def by_store_emp_date(self, store_id, emp_id, date):
         ''' Returns the first object in the queryset
-            that matches all params. '''
-        return Workday.objects.filter(store__store_id__iexact = store_id)\
-                              .filter(employee__emp_id__iexact = emp_id)\
-                              .filter(date = date)[0]
+            that matches all params or None. '''
+        try:
+            workday = Workday.objects.filter(store__store_id__iexact = store_id)\
+                                     .filter(employee__emp_id__iexact = emp_id)\
+                                     .filter(date = date)[0]
+            return workday
+        except IndexError:
+            return None
 
     @classmethod
     def by_store_emp_year_month(self, store_id, emp_id, year, month):
@@ -118,4 +122,6 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
