@@ -67,6 +67,8 @@ class WorkdayCalendarMaker:
                 d = datetime.now()
                 context['year'] = d.year
                 context['month'] = d.month
+                request.session['year'] = d.year
+                request.session['month'] = d.month
             year, month = context['year'], context['month']
             context['store'] = request.session['store']
             context['employee'] = request.session['employee']
@@ -75,4 +77,6 @@ class WorkdayCalendarMaker:
             context['calendar'] = self.get_calendar(store_id, emp_id, year, month)
         else:
             raise ValueError('insufficent data in request.session to get_calendar_context')
-        return context
+        return context
+
+

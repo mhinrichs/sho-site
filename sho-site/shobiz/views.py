@@ -58,7 +58,9 @@ def employee(request):
     pass # wont need this till later
 
 def calendar(request):
-
+    d = datetime.now()
+    request.session['year'] = d.year
+    request.session['month'] = d.month
     try: #Create context, if it fails flush the session and try again.
         context = WorkdayCalendar.get_context_with_calendar(request)
     except ValueError:
@@ -66,6 +68,14 @@ def calendar(request):
         return redirect(index)
 
     return render(request, 'shobiz/calendar.html', context)
+
+def calendar_ajax(request):
+    if request.GET['action']:
+        print("hello from ajax action: {}".format(request.GET['action']))
+    print(request.session['month'])
+    request.session['month'] = request.session['month'] - 1
+    context = WorkdayCalendar.get_context_with_calendar(request)
+    return render(request, 'shobiz/calendar_template.html', context)
 
 def schedule(request):
     context = {}
