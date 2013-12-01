@@ -58,6 +58,7 @@ def employee(request):
     pass # wont need this till later
 
 def calendar(request):
+
     try: #Create context, if it fails flush the session and try again.
         context = WorkdayCalendar.get_context_with_calendar(request)
     except ValueError:
@@ -86,8 +87,6 @@ def schedule(request):
         # On incomplete request send them back to the calendar
         return redirect(index)
     return render(request, 'shobiz/schedule.html', context_dict)
-
-
 
 def time(request):
     now = datetime.today()
