@@ -1,70 +1,99 @@
 # -*- coding: utf-8 -*-
 
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.shortcuts import render, get_object_or_404
-from django.template import Context, loader
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
-from shobiz.classes import WorkdayCalendarMaker
+from shobiz.utils import WorkdayCalendarMaker
 from calendar import Calendar
 from datetime import datetime
 
+#Default data for sessions that involve skipping sections:
+DEFAULT_STORE = Store.objects.get(store_id = 's0001')
+DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
+
 #the calendar
-workdaycal = WorkdayCalendarMaker()
+WorkdayCalendar = WorkdayCalendarMaker()
 
 #helper functions
-def get_calendar(year, month): #change me
-    url = 'shobiz/calendar/?year={0}&month={1}'.format(year, month)
-    return HttpResponse(url)
 
 def encode_datestr(datestring):
     ''' encodeds a datestr to a datetime object '''
     try:
         date = datetime.strptime(datestring, '%Y_%m_%d')
     except:
-        raise ValueError()
+        raise ValueError("Must follow the format YYYY_M_D")
     return date
 
 #views
-def index(request):
-    return render(request, 'shobiz/index.html')
+def test(request): #displays current session variables for testing
+    context = {}
+    if request.session.has_key('store'):
+        context['store'] = request.session['store']
+    if request.session.has_key('employee'):
+        context['employee'] = request.session['employee']
+    if request.session.has_key('date'):
+        context['date'] = request.session['date']
+    request.session.flush()
+
+    return render(request, 'shobiz/test.html', context)
+
+def index(request): #DEFAULT_STORE is a constant so that it wont have to hit the database each time
+    '''The index page will start at store selection.
+       This section can be skipped by adding the relevant
+       default session data and moving on to a later step.'''
+    request.session.flush() #clear old session data
+    skip_store = True
+    skip_employee = True
+    if skip_store and skip_employee: # if only 1 store and 1 employee
+        request.session['store'] = DEFAULT_STORE
+        request.session['employee'] = DEFAULT_EMPLOYEE
+        return redirect(calendar)
+    elif skip_store: #if only one store but multiple employees
+        request.session['store'] = DEFAULT_STORE
+        pass
+    else: #todo select a store index view
+        #each store in the list will be a post method that returns to the view to set the data
+        return render(request, 'shobiz/index.html', {})
+
+def employee(request):
+    pass # wont need this till later
+
+def calendar(request):
+    try: #Create context, if it fails flush the session and try again.
+        context = WorkdayCalendar.get_context_with_calendar(request)
+    except ValueError:
+        request.session.flush()
+        return redirect(index)
+
+    return render(request, 'shobiz/calendar.html', context)
 
 def schedule(request):
-    context_dict = {}
-    needed_keys = ('store_id','emp_id','date')
-    if all(key in request.GET for key in needed_keys):
-        try:
-            store_id = request.GET['store_id']
-            emp_id = request.GET['emp_id']
-            date = encode_datestr(request.GET['date'])
+    context = {}
+    needed_keys = ('store','employee','date')
+    if all(request.session.has_key(key) for key in needed_keys):
+        try: #change to fetch actual employee objects from the database
+            store_id = request.session['store'].store_id
+            emp_id = request.session['employee'].emp_id
+            date = encode_datestr(request.session['date'])
             workday = Workday.by_store_emp_date(store_id, emp_id, date)
             context_dict['year'] = date.year
             context_dict['month'] = date.month
             context_dict['workday'] = workday
         except ValueError:
-            return HttpResponse("schedule problem")
+            # On error send them back index
+            request.session.flush()
+            return redirect(index)
     else:
-        #Just because I dont feel like typing the full info every time
-        url = '?store_id=s0001&emp_id=e000001&date=2014_11_26'
-        return HttpResponseRedirect(url)
+        # On incomplete request send them back to the calendar
+        return redirect(index)
     return render(request, 'shobiz/schedule.html', context_dict)
 
-def calendar(request, store_id, emp_id, year, month):
-    try:
-        context_dict = {}
-        year, month = int(year), int(month)
-        context_dict['year'] = year
-        context_dict['month'] = month
-        context_dict['employee'] = Employee.objects.get(emp_id=emp_id)
-        context_dict['days_of_week'] = workdaycal.get_weekdays()
-        context_dict['calendar'] = workdaycal.get_calendar(store_id, emp_id, year, month)
-    except:
-        return HttpResponse("Dude, wtf bro!")
-    return render(request, 'shobiz/calendar.html', context_dict)
+
 
 def time(request):
     now = datetime.today()
     context = {'now': now,
                'link': 'http://localhost:8000/shobiz/schedule/?store_id=s0001&emp_id=e000001&date=2014_11_26'}
     return render(request, 'shobiz/time.html', context)
+
+
 

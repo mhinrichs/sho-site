@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import date
+from datetime import date, datetime
 from calendar import Calendar
 from shobiz.models import Workday
 
@@ -54,4 +54,25 @@ class WorkdayCalendarMaker:
     def get_weekdays(self):
         ''' todo optionally add weekdays for non japan regions '''
         return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
-
+
+    def get_context_with_calendar(self, request):
+        context = {}
+        required_keys = ('store', 'employee')
+        optional_keys = ('year', 'month')
+        if all(request.session.has_key(key) for key in required_keys):
+            if all(request.session.has_key(key) for key in optional_keys):
+                context['year'] = request.session['year']
+                context['month'] = request.session['month']
+            else:
+                d = datetime.now()
+                context['year'] = d.year
+                context['month'] = d.month
+            year, month = context['year'], context['month']
+            context['store'] = request.session['store']
+            context['employee'] = request.session['employee']
+            context['days_of_week'] = self.get_weekdays()
+            store_id, emp_id = context['store'].store_id, context['employee'].emp_id
+            context['calendar'] = self.get_calendar(store_id, emp_id, year, month)
+        else:
+            raise ValueError('insufficent data in request.session to get_calendar_context')
+        return context
