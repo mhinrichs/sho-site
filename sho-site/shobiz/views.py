@@ -71,9 +71,7 @@ def calendar(request):
 
 def calendar_ajax(request):
     if request.GET['action']:
-        print("hello from ajax action: {}".format(request.GET['action']))
-    print(request.session['month'])
-    request.session['month'] = request.session['month'] - 1
+        WorkdayCalendar.navigate(request)
     context = WorkdayCalendar.get_context(request)
     return render(request, 'shobiz/calendar_template.html', context)
 
@@ -103,6 +101,8 @@ def time(request):
     context = {'now': now,
                'link': 'http://localhost:8000/shobiz/schedule/?store_id=s0001&emp_id=e000001&date=2014_11_26'}
     return render(request, 'shobiz/time.html', context)
+
+
 
 
 

@@ -97,11 +97,11 @@ class Workday(models.Model):
             if block.is_booked:
                 count += 1
         if count == 0 or count/total >= .5:
-            return "green"
+            return "green clickable"
         elif count/total >= .2:
-            return "yellow"
+            return "yellow clickable"
         elif count/total > 0:
-            return "orange"
+            return "orange clickable"
         else:
             return "red"
 

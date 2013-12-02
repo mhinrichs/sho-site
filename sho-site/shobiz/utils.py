@@ -90,6 +90,51 @@ class WorkdayCalendar:
             raise ValueError('insufficent data in request.session to get_calendar_context')
         return context
 
+    def navigate(self, request):
+        ''' Updates session and returns a new calendar
+            based on an ajax request. '''
+        required_keys = ('store', 'employee', 'year', 'month')
+        if not all(request.session.has_key(key) for key in required_keys):
+            for item in required_keys:
+                print("{}:{}".format(item, request.session.has_key(item)))
+            raise ValueError("Insufficent parameters to complete ajax request.")
+        elif request.session['year'] >= 9999 or request.session['year'] <= 1:
+            # based on year min/max of the python calendar module
+            raise ValueError("Year value exceeds max/min.")
+        else:
+            store = request.session['store']
+            employee = request.session['employee']
+            year = request.session['year']
+            month = request.session['month']
+            action = request.GET['action']
 
+        #navigation / validation functions
+        def current():
+            d = datetime.now()
+            request.session['year'] = d.year
+            request.session['month'] = d.month
 
-
+        def back():
+            if month > 1:
+                request.session['month'] = month - 1
+            else:
+                request.session['year'] = year - 1
+                request.session['month'] = 12
+
+        def forward():
+            if month < 12:
+                request.session['month'] = month + 1
+            else:
+                request.session['month'] = 1
+                request.session['year'] = year + 1
+
+        def nav(action=action):
+            actions = {'current': current,
+                       'back': back,
+                       'forward': forward}
+            try:
+                return actions[action]()
+            except KeyError:
+                return actions['current']()
+
+        return nav()
