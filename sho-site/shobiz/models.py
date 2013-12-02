@@ -89,7 +89,7 @@ class Workday(models.Model):
         return self.date.strftime("%Y_%m_%d")
 
     def get_status(self): #consider moving this
-        ''' returns busy status of a workday '''
+        ''' Returns busy status of a workday '''
         blocks = self.timeblock_set.all()
         total = len(blocks)
         count = float(0)
@@ -117,6 +117,8 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
 
 

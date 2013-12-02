@@ -26,7 +26,7 @@ $(document).ready(function() {
   });
 
   $('#cal').on('click', '.clickable', function() {
-  $.get("ajax/",
+  $.get("/shobiz/schedule/",
     {date: this.id},
     function(response) {
       window.location.href = "/shobiz/schedule/";
@@ -37,6 +37,8 @@ $(document).ready(function() {
 
 
 });
+
+
 
 
 

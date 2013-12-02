@@ -12,11 +12,12 @@ urlpatterns = patterns('',
     url(r'^calendar/$', views.calendar, name='calendar'),
     url(r'^calendar/ajax/$', views.calendar_ajax, name='calendar_ajax'),
     url(r'^employees/$', views.employee, name='employees'),
-    url(r'^time/$', views.time, name='time'),
 
 )
 
 
 # (?P<store_id>\w+)/(?P<emp_id>\w+)/(?P<year>\d+)/(?P<month>\d+)/
+
+
 
 

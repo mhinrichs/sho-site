@@ -64,7 +64,7 @@ class WorkdayCalendar:
             Right now these are just the weekdays in Japanese.'''
         return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
 
-    def get_context(self, request):
+    def get_calendar_context(self, request):
         '''Gets an appropriate context for a calendar based off of
            a client sesssion'''
         context = {}
@@ -137,4 +137,22 @@ class WorkdayCalendar:
             except KeyError:
                 return actions['current']()
 
-        return nav()
+        return nav()
+
+    def get_schedule_context(self, request):
+        context = {}
+        needed_keys = ('store','employee','date')
+        if all(request.session.has_key(key) for key in needed_keys):
+            store = request.session['store']
+            employee = request.session['employee']
+            date = request.session['date']
+            workday = Workday.by_store_emp_date(store, employee, date)
+            context['year'] = date.year
+            context['month'] = date.month
+            context['workday'] = workday
+            context['store'] = store
+            context['employee'] = employee
+        else:
+            raise ValueError("Insufficient session data to create schedule context")
+        return context
+

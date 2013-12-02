@@ -62,58 +62,29 @@ def calendar(request):
     request.session['year'] = d.year
     request.session['month'] = d.month
     try: #Create context, if it fails flush the session and try again.
-        context = WorkdayCalendar.get_context(request)
+        context = WorkdayCalendar.get_calendar_context(request)
     except ValueError:
         request.session.flush()
         return redirect(index)
-
     return render(request, 'shobiz/calendar.html', context)
 
 def calendar_ajax(request):
-    if request.GET.has_key('date'):
-        date = encode_datestr(request.GET['date'])
-        print(date)
-        request.session['date'] = date
-        return redirect(schedule)
-    if request.GET.has_key('action'):
+    try:
         WorkdayCalendar.navigate(request)
-    context = WorkdayCalendar.get_context(request)
+    except ValueError:
+        request.session.flush()
+        return redirect(index)
+    context = WorkdayCalendar.get_calendar_context(request)
     return render(request, 'shobiz/calendar_template.html', context)
 
 def schedule(request):
-    context = {}
-    needed_keys = ('store','employee','date')
-    if all(request.session.has_key(key) for key in needed_keys):
-        try: #change to fetch actual employee objects from the database
-            store = request.session['store']
-            employee = request.session['employee']
-            date = request.session['date']
-            workday = Workday.by_store_emp_date(store, employee, date)
-            context['year'] = date.year
-            context['month'] = date.month
-            context['workday'] = workday
-            context['store'] = store
-            context['employee'] = employee
-        except ValueError:
-            # On error send them back index
-            request.session.flush()
-            return redirect(index)
-    else:
-        # On incomplete request send them back to the calendar
+    try:
+        if request.GET.has_key('date'):
+            date = encode_datestr(request.GET['date'])
+            request.session['date'] = date
+        context = WorkdayCalendar.get_schedule_context(request)
+    except ValueError:
+        request.session.flush()
         return redirect(index)
     return render(request, 'shobiz/schedule.html', context)
-
-def time(request):
-    now = datetime.today()
-    context = {'now': now,
-               'link': 'http://localhost:8000/shobiz/schedule/?store_id=s0001&emp_id=e000001&date=2014_11_26'}
-    return render(request, 'shobiz/time.html', context)
-
-
-
-
-
-
-
-
 
