@@ -2,7 +2,7 @@
 
 from django.shortcuts import render, redirect
 from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
-from shobiz.utils import WorkdayCalendarMaker
+from shobiz.utils import WorkdayCalendar
 from calendar import Calendar
 from datetime import datetime
 
@@ -11,7 +11,7 @@ DEFAULT_STORE = Store.objects.get(store_id = 's0001')
 DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
 
 #the calendar
-WorkdayCalendar = WorkdayCalendarMaker()
+WorkdayCalendar = WorkdayCalendar()
 
 #helper functions
 
@@ -62,7 +62,7 @@ def calendar(request):
     request.session['year'] = d.year
     request.session['month'] = d.month
     try: #Create context, if it fails flush the session and try again.
-        context = WorkdayCalendar.get_context_with_calendar(request)
+        context = WorkdayCalendar.get_context(request)
     except ValueError:
         request.session.flush()
         return redirect(index)
@@ -74,7 +74,7 @@ def calendar_ajax(request):
         print("hello from ajax action: {}".format(request.GET['action']))
     print(request.session['month'])
     request.session['month'] = request.session['month'] - 1
-    context = WorkdayCalendar.get_context_with_calendar(request)
+    context = WorkdayCalendar.get_context(request)
     return render(request, 'shobiz/calendar_template.html', context)
 
 def schedule(request):
@@ -82,10 +82,10 @@ def schedule(request):
     needed_keys = ('store','employee','date')
     if all(request.session.has_key(key) for key in needed_keys):
         try: #change to fetch actual employee objects from the database
-            store_id = request.session['store'].store_id
-            emp_id = request.session['employee'].emp_id
+            store = request.session['store']
+            employee = request.session['employee']
             date = encode_datestr(request.session['date'])
-            workday = Workday.by_store_emp_date(store_id, emp_id, date)
+            workday = Workday.by_store_emp_date(store, employee, date)
             context_dict['year'] = date.year
             context_dict['month'] = date.month
             context_dict['workday'] = workday
@@ -103,6 +103,8 @@ def time(request):
     context = {'now': now,
                'link': 'http://localhost:8000/shobiz/schedule/?store_id=s0001&emp_id=e000001&date=2014_11_26'}
     return render(request, 'shobiz/time.html', context)
+
+
 
 
 

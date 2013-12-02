@@ -26,7 +26,7 @@ class EmployeeWorkday:
     def to_string(self):
         return self.date.strftime("%Y_%m_%d") #underscores because its used as an id in html tag
 
-class WorkdayCalendarMaker:
+class WorkdayCalendar:
 
     '''Pairs workdays with calendar from the calendar module.
        The workdays are captured as a single query set to avoid hitting
@@ -35,28 +35,40 @@ class WorkdayCalendarMaker:
     def __init__(self, weekdaystart = 6):
         self.calendar = Calendar(weekdaystart)
 
-    def get_calendar(self, store_id, emp_id, year, month):
-        query_set = Workday.by_store_emp_year_month(store_id, emp_id, year, month)
+    def create_calendar(self, store, employee, year, month):
+        ''' Gets a queryset containing workdays from the database.
+            Pairs queryset with dates from the python calendar module
+            and returns a new monthdatescalendar with the dates replaced
+            with EmployeeWorkday objects.
+
+            The status of the day (how many of the timeblocks are booked)
+            is updated during the pairing process. '''
+        query_set = Workday.by_store_emp_year_month(store, employee, year, month)
         calendar = []
         for week in self.calendar.monthdatescalendar(year, month):
             workweek = []
             for date in week:
                 if date.month != month: #process status for other months (dimmed)
-                    workday = EmployeeWorkday(store_id, emp_id, date, None, 'dimmed')
+                    workday = EmployeeWorkday(store, employee, date, None, 'dimmed')
                     workday.pair_workday(query_set)
                 else:  #process the date and match queries from the database
-                    workday = EmployeeWorkday(store_id, emp_id, date)
+                    workday = EmployeeWorkday(store, employee, date)
                     workday.pair_workday(query_set)
                 workweek.append(workday)
             calendar.append(workweek)
         return calendar
 
     def get_weekdays(self):
-        ''' todo optionally add weekdays for non japan regions '''
+        ''' Todo optionally add weekdays for non japan regions
+            by adding an interface with the locale module.
+            Right now these are just the weekdays in Japanese.'''
         return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
 
-    def get_context_with_calendar(self, request):
+    def get_context(self, request):
+        '''Gets an appropriate context for a calendar based off of
+           a client sesssion'''
         context = {}
+        context['days_of_week'] = self.get_weekdays()
         required_keys = ('store', 'employee')
         optional_keys = ('year', 'month')
         if all(request.session.has_key(key) for key in required_keys):
@@ -70,13 +82,14 @@ class WorkdayCalendarMaker:
                 request.session['year'] = d.year
                 request.session['month'] = d.month
             year, month = context['year'], context['month']
-            context['store'] = request.session['store']
-            context['employee'] = request.session['employee']
-            context['days_of_week'] = self.get_weekdays()
-            store_id, emp_id = context['store'].store_id, context['employee'].emp_id
-            context['calendar'] = self.get_calendar(store_id, emp_id, year, month)
+            store, employee = request.session['store'], request.session['employee']
+            context['store'] = store
+            context['employee'] = employee
+            context['calendar'] = self.create_calendar(store, employee, year, month)
         else:
             raise ValueError('insufficent data in request.session to get_calendar_context')
         return context
+
+
 
 

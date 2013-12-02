@@ -47,11 +47,6 @@ class Employee(Person):
     emp_id = models.CharField(max_length=7, unique=True, validators=[validate.valid_emp_id])
     birthday = models.DateField(blank=False)
 
-    # object filters
-    @classmethod
-    def by_emp_id(self, store_id, emp_id): #unused for now
-        return Employee.objects.filter(emp_id = emp_id)
-
 class Customer(Person):
 
     ''' A customer '''
@@ -68,32 +63,32 @@ class Workday(models.Model):
         return self.to_string()
 
     @classmethod
-    def by_store_emp_date(self, store_id, emp_id, date):
+    def by_store_emp_date(self, store, employee, date):
         ''' Returns the first object in the queryset
             that matches all params or None. '''
         try:
-            workday = Workday.objects.filter(store__store_id__iexact = store_id)\
-                                     .filter(employee__emp_id__iexact = emp_id)\
+            workday = Workday.objects.filter(store = store)\
+                                     .filter(employee = employee)\
                                      .filter(date = date)[0]
-            return workday
         except IndexError:
             return None
+        return workday
 
     @classmethod
-    def by_store_emp_year_month(self, store_id, emp_id, year, month):
+    def by_store_emp_year_month(self, store, employee, year, month):
         ''' Returns a queryset that contains all workdays
             for a given month.  Used by Calendar class to build
             a Workday Calendar.  Prefetches timeblock data for use
             in building a schedule. '''
-        return Workday.objects.filter(store__store_id__iexact = store_id)\
-                              .filter(employee__emp_id__iexact = emp_id)\
+        return Workday.objects.filter(store = store)\
+                              .filter(employee = employee)\
                               .filter(date__year = year)\
                               .filter(date__month = month)
 
     def to_string(self):
         return self.date.strftime("%Y_%m_%d")
 
-    def get_status(self):
+    def get_status(self): #consider moving this
         ''' returns busy status of a workday '''
         blocks = self.timeblock_set.all()
         total = len(blocks)
@@ -122,4 +117,6 @@ class TimeBlock(models.Model):
 
     def __unicode__(self):
         return str(self.time_start) + "-" + str(self.time_finish)
+
+
 
