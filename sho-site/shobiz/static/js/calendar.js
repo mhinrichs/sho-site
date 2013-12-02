@@ -25,7 +25,20 @@ $(document).ready(function() {
     to_calendar_ajax('forward');
   });
 
+  $('#cal').on('click', '.clickable', function() {
+  $.get("ajax/",
+    {date: this.id},
+    function(response) {
+      window.location.href = "/shobiz/schedule/";
+    },
+    "html"
+  );
+  });
+
+
 });
+
+
 
 
 

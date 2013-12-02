@@ -70,7 +70,12 @@ def calendar(request):
     return render(request, 'shobiz/calendar.html', context)
 
 def calendar_ajax(request):
-    if request.GET['action']:
+    if request.GET.has_key('date'):
+        date = encode_datestr(request.GET['date'])
+        print(date)
+        request.session['date'] = date
+        return redirect(schedule)
+    if request.GET.has_key('action'):
         WorkdayCalendar.navigate(request)
     context = WorkdayCalendar.get_context(request)
     return render(request, 'shobiz/calendar_template.html', context)
@@ -82,11 +87,13 @@ def schedule(request):
         try: #change to fetch actual employee objects from the database
             store = request.session['store']
             employee = request.session['employee']
-            date = encode_datestr(request.session['date'])
+            date = request.session['date']
             workday = Workday.by_store_emp_date(store, employee, date)
-            context_dict['year'] = date.year
-            context_dict['month'] = date.month
-            context_dict['workday'] = workday
+            context['year'] = date.year
+            context['month'] = date.month
+            context['workday'] = workday
+            context['store'] = store
+            context['employee'] = employee
         except ValueError:
             # On error send them back index
             request.session.flush()
@@ -94,13 +101,15 @@ def schedule(request):
     else:
         # On incomplete request send them back to the calendar
         return redirect(index)
-    return render(request, 'shobiz/schedule.html', context_dict)
+    return render(request, 'shobiz/schedule.html', context)
 
 def time(request):
     now = datetime.today()
     context = {'now': now,
                'link': 'http://localhost:8000/shobiz/schedule/?store_id=s0001&emp_id=e000001&date=2014_11_26'}
     return render(request, 'shobiz/time.html', context)
+
+
 
 
 
