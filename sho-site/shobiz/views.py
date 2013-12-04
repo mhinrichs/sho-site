@@ -6,9 +6,9 @@ from shobiz.utils import WorkdayCalendar
 from calendar import Calendar
 from datetime import datetime
 
-#Default data for sessions that involve skipping sections:
-DEFAULT_STORE = Store.objects.get(store_id = 's0001')
-DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
+#Default data for sessions that involve skipping sections create before uncommenting:
+#DEFAULT_STORE = Store.objects.get(store_id = 's0001')
+#DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
 
 #the calendar
 WorkdayCalendar = WorkdayCalendar()
@@ -40,6 +40,8 @@ def index(request): #DEFAULT_STORE is a constant so that it wont have to hit the
     '''The index page will start at store selection.
        This section can be skipped by adding the relevant
        default session data and moving on to a later step.'''
+    DEFAULT_STORE = Store.objects.get(store_id = 's0001')
+    DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
     request.session.flush() #clear old session data
     skip_store = True
     skip_employee = True
@@ -87,4 +89,6 @@ def schedule(request):
         request.session.flush()
         return redirect(index)
     return render(request, 'shobiz/schedule.html', context)
+
+
 

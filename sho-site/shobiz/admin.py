@@ -33,7 +33,7 @@ admin.site.register(Customer, CustomerAdmin)
 class BlockInline(admin.TabularInline):
     model = TimeBlock
     extra = 1
-    fields = ['time_start', 'time_finish']
+    fields = ['time_start', 'time_finish', 'is_booked']
 
 class WorkdayAdmin(admin.ModelAdmin):
 
@@ -50,6 +50,8 @@ class WorkdayAdmin(admin.ModelAdmin):
     list_filter = ['date']
 
 admin.site.register(Workday, WorkdayAdmin)
+
+
 
 
 

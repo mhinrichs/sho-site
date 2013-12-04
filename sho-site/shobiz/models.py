@@ -6,9 +6,9 @@ import shobiz.validators as validate
 class BaseProfile(models.Model):
     name = models.CharField(max_length=30)
     romaji = models.CharField(max_length=100)
-    post_code = models.CharField(max_length=8)
-    address1 = models.CharField(max_length=100)
-    address2 = models.CharField(max_length=100)
+    post_code = models.CharField(max_length=8, blank = True)
+    address1 = models.CharField(max_length=100, blank = True)
+    address2 = models.CharField(max_length=100, blank = True)
     phone = models.CharField(max_length=13)
     email = models.CharField(max_length=35)
     entry_date = models.DateTimeField()
@@ -107,18 +107,43 @@ class Workday(models.Model):
 
 class TimeBlock(models.Model):
 
-    ''' A block of time for a Workday '''
+    ''' A block of time for a Workday
+        A customer can book a reservation
+        within a block of time. '''
 
-    name = models.ForeignKey(Workday)
+    workdate = models.ForeignKey(Workday)
     time_start = models.TimeField()
     time_finish = models.TimeField()
     is_booked = models.BooleanField(default = False)
-    booked_by = models.ForeignKey(Customer, null=True, blank=True)
 
     def __unicode__(self):
-        return str(self.time_start) + "-" + str(self.time_finish)
+        return "{0}: {1}-{2}".format(self.workdate.to_string(),
+                                     str(self.time_start),
+                                     str(self.time_finish))
 
+class SurveyItem(models.Model):
 
+    ''' A service provided, used for booking an
+        exit survey upon completion of a customer
+        reservation
 
+        Each instance should be worded as something
+        the customer is iterested in doing during their
+        appointment '''
+
+    item = models.CharField(max_length = 50)
+
+class Reservation(models.Model):
+
+    ''' A reservation booked on a TimeBlock
+        If the customer books from a logged in state
+        the view will assign values to name and phone
+        from their customer model.'''
+
+    timeblock = models.OneToOneField(TimeBlock)
+    customer = models.ForeignKey(Customer, null=True)
+    name = models.CharField(max_length=50)
+    phone = models.CharField(max_length=13)
+    services = models.ManyToManyField(SurveyItem, null=True)
 
 
