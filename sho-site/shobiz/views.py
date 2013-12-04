@@ -7,8 +7,8 @@ from calendar import Calendar
 from datetime import datetime
 
 #Default data for sessions that involve skipping sections create before uncommenting:
-#DEFAULT_STORE = Store.objects.get(store_id = 's0001')
-#DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
+DEFAULT_STORE = Store.objects.get(store_id = 's0001')
+DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
 
 #the calendar
 WorkdayCalendar = WorkdayCalendar()
@@ -89,6 +89,8 @@ def schedule(request):
         request.session.flush()
         return redirect(index)
     return render(request, 'shobiz/schedule.html', context)
+
+
 
 
 

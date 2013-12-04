@@ -133,12 +133,15 @@ class SurveyItem(models.Model):
 
     item = models.CharField(max_length = 50)
 
+    def __unicode__(self):
+        return str(self.item)
+
 class Reservation(models.Model):
 
     ''' A reservation booked on a TimeBlock
         If the customer books from a logged in state
         the view will assign values to name and phone
-        from their customer model.'''
+        from their customer model. '''
 
     timeblock = models.OneToOneField(TimeBlock)
     customer = models.ForeignKey(Customer, null=True)
@@ -146,4 +149,6 @@ class Reservation(models.Model):
     phone = models.CharField(max_length=13)
     services = models.ManyToManyField(SurveyItem, null=True)
 
+    def __unicode__(self):
+        return "{0} reservation @ {1}".format(self.name, self.timeblock.__unicode__())
 
