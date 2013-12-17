@@ -2,19 +2,20 @@
 
 from django.shortcuts import render, redirect
 from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
-from shobiz.utils import WorkdayCalendar
+from shobiz.utils import WorkdayCalendar, AppointmentManager
 from calendar import Calendar
 from datetime import datetime
 
-#Default data for sessions that involve skipping sections create before uncommenting:
-DEFAULT_STORE = Store.objects.get(store_id = 's0001')
-DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
+# Change after adding default Store and Employee to Database
+USE_DEFAULT_STORE = False
+USE_DEFAULT_EMPLOYEE = False
+DEFAULT_STORE = '''Your Store.objects.get here.'''
+DEFAULT_EMPLOYEE = '''Your Employee.objects.get here.'''
 
-#the calendar
+# WorkdayCalendar
 WorkdayCalendar = WorkdayCalendar()
 
-#helper functions
-
+# Helper functions
 def encode_datestr(datestring):
     ''' encodeds a datestr to a datetime object '''
     try:
@@ -24,40 +25,30 @@ def encode_datestr(datestring):
     return date
 
 #views
-def test(request): #displays current session variables for testing
+def index(request):
+    ''' The index page will start at store selection.
+        This section can be skipped by adding the relevant
+        default session data and moving on to a later step.'''
     context = {}
-    if request.session.has_key('store'):
-        context['store'] = request.session['store']
-    if request.session.has_key('employee'):
-        context['employee'] = request.session['employee']
-    if request.session.has_key('date'):
-        context['date'] = request.session['date']
     request.session.flush()
-
-    return render(request, 'shobiz/test.html', context)
-
-def index(request): #DEFAULT_STORE is a constant so that it wont have to hit the database each time
-    '''The index page will start at store selection.
-       This section can be skipped by adding the relevant
-       default session data and moving on to a later step.'''
-    DEFAULT_STORE = Store.objects.get(store_id = 's0001')
-    DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
-    request.session.flush() #clear old session data
-    skip_store = True
-    skip_employee = True
-    if skip_store and skip_employee: # if only 1 store and 1 employee
-        request.session['store'] = DEFAULT_STORE
-        request.session['employee'] = DEFAULT_EMPLOYEE
-        return redirect(calendar)
-    elif skip_store: #if only one store but multiple employees
-        request.session['store'] = DEFAULT_STORE
+    request.session['apt_manager'] = AppointmentManager()
+    if USE_DEFAULT_STORE:
         pass
-    else: #todo select a store index view
-        #each store in the list will be a post method that returns to the view to set the data
-        return render(request, 'shobiz/index.html', {})
+    elif request.method == 'GET':
+        return render(request, 'shobiz/index.html', context)
+    else:
+        pass
 
 def employee(request):
-    pass # wont need this till later
+    ''' Select an employee from a list of employees based
+        off of the store that was selected '''
+    context = {}
+    if USE_DEFAULT_EMPLOYEE:
+        pass
+    elif request.method == 'GET':
+        return render(request, 'shobiz/employee.html', context)
+    else: # request.method == 'POST':
+        pass
 
 def calendar(request):
     d = datetime.now()
@@ -89,8 +80,4 @@ def schedule(request):
         request.session.flush()
         return redirect(index)
     return render(request, 'shobiz/schedule.html', context)
-
-
-
-
 

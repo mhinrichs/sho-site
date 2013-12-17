@@ -155,4 +155,19 @@ class WorkdayCalendar:
         else:
             raise ValueError("Insufficient session data to create schedule context")
         return context
+
+class AppointmentManager:
+    ''' Each client session will contain an appointment manager to
+        store data related to the appointment that they are booking '''
+
+    def __init__(self):
+        self.store = None
+        self.employee = None
+        self.cal_month = None
+        self.cal_year = None
+        self.target_date = None
+        self.target_time = None
+
+    def has_store(self):
+        return self.store and True
 

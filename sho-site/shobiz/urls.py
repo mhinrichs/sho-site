@@ -7,7 +7,6 @@ from shobiz import views
 urlpatterns = patterns('',
 
     url(r'^$', views.index, name='index'),
-    url(r'^test/$', views.test, name='test'),
     url(r'^schedule/$', views.schedule, name='schedule'),
     url(r'^calendar/$', views.calendar, name='calendar'),
     url(r'^calendar/ajax/$', views.calendar_ajax, name='calendar_ajax'),
@@ -17,6 +16,8 @@ urlpatterns = patterns('',
 
 
 # (?P<store_id>\w+)/(?P<emp_id>\w+)/(?P<year>\d+)/(?P<month>\d+)/
+
+
 
 
 
