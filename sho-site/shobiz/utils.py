@@ -35,7 +35,7 @@ class WorkdayCalendar:
     def __init__(self, weekdaystart = 6):
         self.calendar = Calendar(weekdaystart)
 
-    def create_calendar(self, store, employee, year, month):
+    def create_calendar(self, apt_man):
         ''' Gets a queryset containing workdays from the database.
             Pairs queryset with dates from the python calendar module
             and returns a new monthdatescalendar with the dates replaced
@@ -43,6 +43,10 @@ class WorkdayCalendar:
 
             The status of the day (how many of the timeblocks are booked)
             is updated during the pairing process. '''
+        store = apt_man.store
+        employee = apt_man.employee
+        year = apt_man.cal_year
+        month = apt_man.cal_month
         query_set = Workday.by_store_emp_year_month(store, employee, year, month)
         calendar = []
         for week in self.calendar.monthdatescalendar(year, month):
@@ -64,71 +68,63 @@ class WorkdayCalendar:
             Right now these are just the weekdays in Japanese.'''
         return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
 
-    def get_calendar_context(self, request):
+    def get_calendar_context(self, request): #### FIXME
         '''Gets an appropriate context for a calendar based off of
            a client sesssion'''
         context = {}
         context['days_of_week'] = self.get_weekdays()
-        required_keys = ('store', 'employee')
-        optional_keys = ('year', 'month')
-        if all(request.session.has_key(key) for key in required_keys):
-            if all(request.session.has_key(key) for key in optional_keys):
-                context['year'] = request.session['year']
-                context['month'] = request.session['month']
-            else:
-                d = datetime.now()
-                context['year'] = d.year
-                context['month'] = d.month
-                request.session['year'] = d.year
-                request.session['month'] = d.month
-            year, month = context['year'], context['month']
-            store, employee = request.session['store'], request.session['employee']
-            context['store'] = store
-            context['employee'] = employee
-            context['calendar'] = self.create_calendar(store, employee, year, month)
+        if request.session['apt_manager'].has_store_employee() \
+        and request.session['apt_manager'].has_valid_year_month():
+            apt_man = request.session['apt_manager']
+            context['store'] = apt_man.store
+            context['employee'] = apt_man.employee
+            context['year'] = apt_man.cal_year
+            context['month'] = apt_man.cal_month
+            context['calendar'] = self.create_calendar(apt_man)
         else:
-            raise ValueError('insufficent data in request.session to get_calendar_context')
+            raise ValueError
         return context
 
     def navigate(self, request):
         ''' Updates session and returns a new calendar
             based on an ajax request. '''
-        required_keys = ('store', 'employee', 'year', 'month')
-        if not all(request.session.has_key(key) for key in required_keys):
-            for item in required_keys:
-                print("{}:{}".format(item, request.session.has_key(item)))
-            raise ValueError("Insufficent parameters to complete ajax request.")
-        elif request.session['year'] >= 9999 or request.session['year'] <= 1:
-            # based on year min/max of the python calendar module
-            raise ValueError("Year value exceeds max/min.")
-        else:
-            store = request.session['store']
-            employee = request.session['employee']
-            year = request.session['year']
-            month = request.session['month']
-            action = request.GET['action']
+        if not request.session.has_key('apt_manager') or \
+           not request.session['apt_manager'].has_store_employee() or \
+           not request.session['apt_manager'].has_valid_year_month():
+            raise ValueError
 
-        #navigation / validation functions
+        apt_man = request.session['apt_manager']
+        store, employee = apt_man.store, apt_man.employee
+        year, month = apt_man.cal_year, apt_man.cal_month
+        action = request.GET['action']
+
+        #navigation functions
         def current():
             d = datetime.now()
-            request.session['year'] = d.year
-            request.session['month'] = d.month
+            apt_man.cal_year = d.year
+            apt_man.cal_month = d.month
+            request.session['apt_manager'] = apt_man
+            return request
 
         def back():
             if month > 1:
-                request.session['month'] = month - 1
+                apt_man.cal_month = month - 1
             else:
-                request.session['year'] = year - 1
-                request.session['month'] = 12
+                apt_man.cal_year = year - 1
+                apt_man.cal_month = 12
+            request.session['apt_manager'] = apt_man
+            return request
 
         def forward():
             if month < 12:
-                request.session['month'] = month + 1
+                apt_man.cal_month = month + 1
             else:
-                request.session['month'] = 1
-                request.session['year'] = year + 1
+                apt_man.cal_month = 1
+                apt_man.cal_year = year + 1
+            request.session['apt_manager'] = apt_man
+            return request
 
-        def nav(action=action):
+        def move(action=action):
             actions = {'current': current,
                        'back': back,
                        'forward': forward}
@@ -137,7 +133,7 @@ class WorkdayCalendar:
             except KeyError:
                 return actions['current']()
 
-        return nav()
+        return move()
 
     def get_schedule_context(self, request):
         context = {}
@@ -169,5 +165,17 @@ class AppointmentManager:
         self.target_time = None
 
     def has_store(self):
-        return self.store and True
+        return bool(self.store)
+
+    def has_store_employee(self):
+        print("i have this for has_store {}".format(self.has_store()))
+        print("i have this for self.employee {} ".format(self.employee))
+        return self.has_store() and bool(self.employee)
+
+    def has_valid_year_month(self):
+        ''' checks if year and month are valid for creating calendar
+            context '''
+        valid_month = self.cal_month >= 1 and self.cal_month <= 12
+        valid_year = self.cal_year <= 9998 and self.cal_year > 1
+        return valid_month and valid_year
 

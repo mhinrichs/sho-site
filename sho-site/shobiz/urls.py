@@ -10,15 +10,7 @@ urlpatterns = patterns('',
     url(r'^schedule/$', views.schedule, name='schedule'),
     url(r'^calendar/$', views.calendar, name='calendar'),
     url(r'^calendar/ajax/$', views.calendar_ajax, name='calendar_ajax'),
-    url(r'^employees/$', views.employee, name='employees'),
+    url(r'^employee/$', views.employee, name='employee'),
 
 )
-
-
-# (?P<store_id>\w+)/(?P<emp_id>\w+)/(?P<year>\d+)/(?P<month>\d+)/
-
-
-
-
-
 
