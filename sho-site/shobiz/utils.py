@@ -103,8 +103,6 @@ class WorkdayCalendar:
             d = datetime.now()
             apt_man.cal_year = d.year
             apt_man.cal_month = d.month
-            request.session['apt_manager'] = apt_man
-            return request
 
         def back():
             if month > 1:
@@ -112,8 +110,6 @@ class WorkdayCalendar:
             else:
                 apt_man.cal_year = year - 1
                 apt_man.cal_month = 12
-            request.session['apt_manager'] = apt_man
-            return request
 
         def forward():
             if month < 12:
@@ -121,8 +117,6 @@ class WorkdayCalendar:
             else:
                 apt_man.cal_month = 1
                 apt_man.cal_year = year + 1
-            request.session['apt_manager'] = apt_man
-            return request
 
         def move(action=action):
             actions = {'current': current,
@@ -132,6 +126,7 @@ class WorkdayCalendar:
                 return actions[action]()
             except KeyError:
                 return actions['current']()
+            request.session['apt_manager'] = apt_man
 
         return move()
 
@@ -178,4 +173,6 @@ class AppointmentManager:
         valid_month = self.cal_month >= 1 and self.cal_month <= 12
         valid_year = self.cal_year <= 9998 and self.cal_year > 1
         return valid_month and valid_year
+
+
 
