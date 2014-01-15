@@ -163,11 +163,15 @@ class AppointmentManager:
         return bool(self.store)
 
     def has_store_employee(self):
-        print("i have this for has_store {}".format(self.has_store()))
-        print("i have this for self.employee {} ".format(self.employee))
         return self.has_store() and bool(self.employee)
 
-    def has_valid_year_month(self):
+    def has_store_employee_date(self):
+        return has_store_employee() and bool(self.target_date)
+
+    def has_store_employee_date_time(self):
+        return has_store_employee_date() and bool(self.target_time)
+
+    def has_valid_year_month(self): #used by for calendar navigation
         ''' checks if year and month are valid for creating calendar
             context '''
         valid_month = self.cal_month >= 1 and self.cal_month <= 12
@@ -175,4 +179,8 @@ class AppointmentManager:
         return valid_month and valid_year
 
 
-
+
+
+
+
+

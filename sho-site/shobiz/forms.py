@@ -16,4 +16,4 @@ class SurveyForm(forms.ModelForm):
 
     class Meta(self):
         model = Reservation
-        fields = ('services')
+        fields = ('services')

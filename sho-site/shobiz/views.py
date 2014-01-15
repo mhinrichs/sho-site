@@ -6,22 +6,14 @@ from shobiz.utils import WorkdayCalendar, AppointmentManager
 from calendar import Calendar
 from datetime import datetime
 
-#for testing purposes
+# WorkdayCalendar
+WorkdayCalendar = WorkdayCalendar()
 
 # Change after adding default Store and Employee to Database
-USE_DEFAULT_STORE = False
-USE_DEFAULT_EMPLOYEE = False
-DEFAULT_STORE = '''default here'''
-DEFAULT_EMPLOYEE = '''default employee'''
-
 USE_DEFAULT_STORE = True
 USE_DEFAULT_EMPLOYEE = True
 DEFAULT_STORE = Store.objects.get(store_id = 's0001')
 DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
-
-
-# WorkdayCalendar
-WorkdayCalendar = WorkdayCalendar()
 
 # Helper functions
 def encode_datestr(datestring):
@@ -52,12 +44,11 @@ def index(request):
 def employee(request):
     ''' Select an employee from a list of employees based
         off of the store that was selected '''
-    print("Currently set value for store {} after redirect".format(request.session['apt_manager'].store))
     context = {}
     if not request.session.has_key('apt_manager') or \
        not request.session['apt_manager'].has_store():
         return redirect(index)
-    if USE_DEFAULT_EMPLOYEE:
+    elif USE_DEFAULT_EMPLOYEE:
         request.session['apt_manager'].employee = DEFAULT_EMPLOYEE
         request.session.modified = True
         return redirect(calendar)
@@ -70,11 +61,12 @@ def calendar(request):
     if not request.session.has_key('apt_manager') or \
        not request.session['apt_manager'].has_store_employee():
         return redirect(index)
-    d = datetime.now()
-    request.session['apt_manager'].cal_year = d.year
-    request.session['apt_manager'].cal_month = d.month
-    request.session.modified = True
-    context = WorkdayCalendar.get_calendar_context(request)
+    else:
+        d = datetime.now()
+        request.session['apt_manager'].cal_year = d.year
+        request.session['apt_manager'].cal_month = d.month
+        request.session.modified = True
+        context = WorkdayCalendar.get_calendar_context(request)
     return render(request, 'shobiz/calendar.html', context)
 
 def calendar_ajax(request):
@@ -87,13 +79,21 @@ def calendar_ajax(request):
     return render(request, 'shobiz/calendar_template.html', context)
 
 def schedule(request):
-    try:
-        if request.GET.has_key('date'):
-            date = encode_datestr(request.GET['date'])
-            request.session['apt_manager'].target_date = date
-            request.session.modified = True
-        context = WorkdayCalendar.get_schedule_context(request)
-    except ValueError:
+    if not request.session.has_key('apt_manager') or \
+       not request.session['apt_manager'].has_store_employee():
         return redirect(index)
+    elif not request.GET.has_key('date'):
+        return redirect(calendar)
+    else:
+        date = encode_datestr(request.GET['date'])
+        request.session['apt_manager'].target_date = date
+        request.session.modified = True
+        context = WorkdayCalendar.get_schedule_context(request)
     return render(request, 'shobiz/schedule.html', context)
-
+
+
+def appointment(request):
+    pass
+
+def result(request):
+    pass
