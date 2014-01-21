@@ -3,6 +3,7 @@
 from django.shortcuts import render, redirect
 from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
 from shobiz.utils import WorkdayCalendar, AppointmentManager
+from shobiz.forms import ReservationForm
 from calendar import Calendar
 from datetime import datetime
 
@@ -82,18 +83,33 @@ def schedule(request):
     if not request.session.has_key('apt_manager') or \
        not request.session['apt_manager'].has_store_employee():
         return redirect(index)
-    elif not request.GET.has_key('date'):
-        return redirect(calendar)
-    else:
+    elif request.GET.has_key('date'):
         date = encode_datestr(request.GET['date'])
         request.session['apt_manager'].target_date = date
         request.session.modified = True
-        context = WorkdayCalendar.get_schedule_context(request)
+    else:
+        pass
+    context = WorkdayCalendar.get_schedule_context(request)
     return render(request, 'shobiz/schedule.html', context)
 
 
-def appointment(request):
-    pass
+def make_appointment(request):
+    if not request.session.has_key('apt_manager') or \
+       not request.session['apt_manager'].has_store_employee_date():
+        return redirect(index)
+    else:
+        if request.method == 'POST':
+            form = ReservationForm(request.POST)
+            if form.is_valid():
+                form.save(commit=True)
+                return success(request)
+            else:
+                print(form.errors)
+        else:
+            form = ReservationForm()
+    context = {'form': form}
+    return render(request, 'shobiz/appointment.html', context)
 
-def result(request):
+def success(request):
+    '''When customer confirms appointment sends confirmation mail to manager.'''
     pass

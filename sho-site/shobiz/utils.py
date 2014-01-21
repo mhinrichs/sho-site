@@ -132,11 +132,10 @@ class WorkdayCalendar:
 
     def get_schedule_context(self, request):
         context = {}
-        needed_keys = ('store','employee','date')
-        if all(request.session.has_key(key) for key in needed_keys):
-            store = request.session['store']
-            employee = request.session['employee']
-            date = request.session['date']
+        if request.session.has_key('apt_manager'):
+            store = request.session['apt_manager'].store
+            employee = request.session['apt_manager'].employee
+            date = request.session['apt_manager'].target_date
             workday = Workday.by_store_emp_date(store, employee, date)
             context['year'] = date.year
             context['month'] = date.month
@@ -166,7 +165,7 @@ class AppointmentManager:
         return self.has_store() and bool(self.employee)
 
     def has_store_employee_date(self):
-        return has_store_employee() and bool(self.target_date)
+        return self.has_store_employee() and bool(self.target_date)
 
     def has_store_employee_date_time(self):
         return has_store_employee_date() and bool(self.target_time)

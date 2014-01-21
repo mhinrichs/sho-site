@@ -8,6 +8,10 @@
 <link rel="stylesheet" type="text/css" href="{% static "css/schedule.css" %}"/>
 {% endaddtoblock %}
 
+{% addtoblock "js" %}
+  <script src="{% static "js/schedule.js" %}"></script>
+{% endaddtoblock %}
+
 <div class="container">
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
@@ -32,7 +36,7 @@
           {% if workday %}
           <p>{{ workday.date.year }}-{{ workday.date.month }}-{{ workday.date.day }}</p>
           {% for timeblock in workday.timeblock_set.all %}
-          <div class="col-xl-12 timeblock">{{ timeblock }} {{ timeblock.start_time }}-{{ timeblock.end_time }}: Booked = {{timeblock.is_booked}}</div>
+          <div class="col-xl-12 timeblock clickable" id="{{ timeblock.pk }}">{{ timeblock }} {{ timeblock.start_time }}-{{ timeblock.end_time }}: Booked = {{timeblock.is_booked}}</div>
           {% endfor %}
           {%else%}
           <p>Sorry {{ employee.name }} doesn't work on the date you selected</p>
@@ -42,4 +46,5 @@
     </div> <!--outerrow-->
   </div> <!--container-->
 
-{% endblock %}
+{% endblock %}
+

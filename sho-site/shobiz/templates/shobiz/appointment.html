@@ -1,0 +1,24 @@
+{% extends "shobiz/apo_base.html" %}
+
+{% load sekizai_tags static %}
+
+{% block base_content %}
+
+<p>Appointment form!</p>
+<form id="appointment_form" method="post" action="/shobiz/schedule/appointment/">
+
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    {% for field in form.visible_fields %}
+        {{ field.errors }}
+        {{ field.help_text}}
+        {{ field }}
+    {% endfor %}
+
+    <input type="submit" name="submit" value="Register Appointment" />
+</form>
+
+{% endblock %}
