@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
 from shobiz.utils import WorkdayCalendar, AppointmentManager
 from shobiz.forms import ReservationForm
+from shobiz.validators import valid_session_for_view
 from calendar import Calendar
 from datetime import datetime
 
@@ -16,59 +17,54 @@ USE_DEFAULT_EMPLOYEE = True
 DEFAULT_STORE = Store.objects.get(store_id = 's0001')
 DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
 
-# Helper functions
-def encode_datestr(datestring):
-    ''' encodeds a datestr to a datetime object '''
-    try:
-        date = datetime.strptime(datestring, '%Y_%m_%d')
-    except:
-        raise ValueError("Must follow the format YYYY_M_D")
-    return date
-
-#views
 def index(request):
-    ''' The index page will start at store selection.
-        This section can be skipped by adding the relevant
-        default session data and moving on to a later step.'''
+    # perform initial setup
     context = {}
     request.session.flush()
     request.session['apt_manager'] = AppointmentManager()
-    if USE_DEFAULT_STORE:
-        request.session['apt_manager'].store = DEFAULT_STORE
-        request.session.modified = True
-        return redirect(employee)
-    elif request.method == 'GET': #write a view for selecting store
-        return render(request, 'shobiz/index.html', context)
-    else: # request.method == 'POST':
+
+    if request.method == 'POST':
+        # do something
         pass
+    else:
+        if USE_DEFAULT_STORE:
+            request.session['apt_manager'].store = DEFAULT_STORE
+            request.session.modified = True
+            return redirect(employee)
+        else: #write a view for selecting store
+            return render(request, 'shobiz/index.html', context)
 
 def employee(request):
-    ''' Select an employee from a list of employees based
-        off of the store that was selected '''
-    context = {}
-    if not request.session.has_key('apt_manager') or \
-       not request.session['apt_manager'].has_store():
+    # verify session info
+    if not valid_session_for_view(request, 'employee'):
         return redirect(index)
-    elif USE_DEFAULT_EMPLOYEE:
-        request.session['apt_manager'].employee = DEFAULT_EMPLOYEE
-        request.session.modified = True
-        return redirect(calendar)
-    elif request.method == 'GET': #write a view for selecting employee
-        return render(request, 'shobiz/employee.html', context)
-    else: # request.method == 'POST':
+
+    if request.method = 'POST':
+        # do something
         pass
+    else:
+        if USE_DEFAULT_EMPLOYEE:
+            request.session['apt_manager'].employee = DEFAULT_EMPLOYEE
+            request.session.modified = True
+            return redirect(calendar)
+        else:
+            return render(request, 'shobiz/employee.html', context)
 
 def calendar(request):
-    if not request.session.has_key('apt_manager') or \
-       not request.session['apt_manager'].has_store_employee():
+    # verify session info
+    if not valid_session_for_view(request, 'calendar'):
         return redirect(index)
+
+    if request.method = 'POST':
+        # do something
+        pass
     else:
         d = datetime.now()
         request.session['apt_manager'].cal_year = d.year
         request.session['apt_manager'].cal_month = d.month
         request.session.modified = True
         context = WorkdayCalendar.get_calendar_context(request)
-    return render(request, 'shobiz/calendar.html', context)
+        return render(request, 'shobiz/calendar.html', context)
 
 def calendar_ajax(request):
     try:
@@ -80,11 +76,11 @@ def calendar_ajax(request):
     return render(request, 'shobiz/calendar_template.html', context)
 
 def schedule(request):
-    if not request.session.has_key('apt_manager') or \
-       not request.session['apt_manager'].has_store_employee():
+    if not valid_session_for_view(request, 'schedule'):
         return redirect(index)
+
     elif request.GET.has_key('date'):
-        date = encode_datestr(request.GET['date'])
+        date = WorkdayCalendar.encode_datestr(request.GET['date'])
         request.session['apt_manager'].target_date = date
         request.session.modified = True
     else:
@@ -94,9 +90,9 @@ def schedule(request):
 
 
 def make_appointment(request):
-    if not request.session.has_key('apt_manager') or \
-       not request.session['apt_manager'].has_store_employee_date():
+    if not valid_session_for_view(request, 'make_appointment'):
         return redirect(index)
+
     else:
         if request.method == 'POST':
             form = ReservationForm(request.POST)

@@ -146,6 +146,14 @@ class WorkdayCalendar:
             raise ValueError("Insufficient session data to create schedule context")
         return context
 
+    def encode_datestr(datestring):
+    ''' encodes a datestr to a datetime object '''
+        try:
+            date = datetime.strptime(datestring, '%Y_%m_%d')
+        except:
+            raise ValueError("Must follow the format YYYY_M_D")
+        return date
+
 class AppointmentManager:
     ''' Each client session will contain an appointment manager to
         store data related to the appointment that they are booking '''
@@ -158,16 +166,16 @@ class AppointmentManager:
         self.target_date = None
         self.target_time = None
 
-    def has_store(self):
+    def _has_store(self):
         return bool(self.store)
 
-    def has_store_employee(self):
+    def _has_store_employee(self):
         return self.has_store() and bool(self.employee)
 
-    def has_store_employee_date(self):
+    def _has_store_employee_date(self):
         return self.has_store_employee() and bool(self.target_date)
 
-    def has_store_employee_date_time(self):
+    def _has_store_employee_date_time(self):
         return has_store_employee_date() and bool(self.target_time)
 
     def has_valid_year_month(self): #used by for calendar navigation
@@ -177,9 +185,13 @@ class AppointmentManager:
         valid_year = self.cal_year <= 9998 and self.cal_year > 1
         return valid_month and valid_year
 
+    def ready_for_view(self, viewName):
 
+        viewNames = {
+                     'employee': _has_store
+                     'calendar': _has_store_employee
+                     'schedule': _has_store_employee_date
+                     'make_appointment': _has_store_employee_date_times
+                     }
 
-
-
-
-
+        return viewNames[viewName]()
