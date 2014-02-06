@@ -5,17 +5,16 @@ from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
 from shobiz.utils import WorkdayCalendar, AppointmentManager
 from shobiz.forms import ReservationForm
 from shobiz.validators import valid_session_for_view
+from shobiz.defaults import DEFAULT_STORE, DEFAULT_EMPLOYEE
 from calendar import Calendar
 from datetime import datetime
 
-# WorkdayCalendar
+# Settings
 WorkdayCalendar = WorkdayCalendar()
-
-# Change after adding default Store and Employee to Database
 USE_DEFAULT_STORE = True
 USE_DEFAULT_EMPLOYEE = True
-DEFAULT_STORE = Store.objects.get(store_id = 's0001')
-DEFAULT_EMPLOYEE = Employee.objects.get(emp_id = 'e000001')
+
+# Views
 
 def index(request):
     # perform initial setup
@@ -39,7 +38,7 @@ def employee(request):
     if not valid_session_for_view(request, 'employee'):
         return redirect(index)
 
-    if request.method = 'POST':
+    if request.method == 'POST':
         # do something
         pass
     else:
@@ -55,7 +54,7 @@ def calendar(request):
     if not valid_session_for_view(request, 'calendar'):
         return redirect(index)
 
-    if request.method = 'POST':
+    if request.method == 'POST':
         # do something
         pass
     else:
@@ -75,8 +74,8 @@ def calendar_ajax(request):
     context = WorkdayCalendar.get_calendar_context(request)
     return render(request, 'shobiz/calendar_template.html', context)
 
-def schedule(request):
-    if not valid_session_for_view(request, 'schedule'):
+def schedule(request): #we need to back up and post to calendar from ajax
+    if not valid_session_for_view(request, 'calendar'):
         return redirect(index)
 
     elif request.GET.has_key('date'):

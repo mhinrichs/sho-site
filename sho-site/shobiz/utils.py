@@ -3,6 +3,7 @@
 from datetime import date, datetime
 from calendar import Calendar
 from shobiz.models import Workday
+from shobiz.validators import valid_session_for_view
 
 class EmployeeWorkday:
 
@@ -20,7 +21,7 @@ class EmployeeWorkday:
             elif entry.date == self.date:
                 self.workday = entry
                 self.status = entry.get_status()
-        if not self.status: # None as status means no workday record / employee is off work
+        if self.status == None: # None as status means no workday record / employee is off work
             self.status = 'offwork'
 
     def to_string(self):
@@ -68,14 +69,14 @@ class WorkdayCalendar:
             Right now these are just the weekdays in Japanese.'''
         return [r"日", r"月", r"火", r"水", r"木", r"金", r"土"]
 
-    def get_calendar_context(self, request): #### FIXME
+    def get_calendar_context(self, request):
         '''Gets an appropriate context for a calendar based off of
            a client sesssion'''
         context = {}
-        context['days_of_week'] = self.get_weekdays()
-        if request.session['apt_manager'].has_store_employee() \
-        and request.session['apt_manager'].has_valid_year_month():
+        if valid_session_for_view(request, 'calendar') and \
+        request.session['apt_manager'].has_valid_year_month():
             apt_man = request.session['apt_manager']
+            context['days_of_week'] = self.get_weekdays()
             context['store'] = apt_man.store
             context['employee'] = apt_man.employee
             context['year'] = apt_man.cal_year
@@ -88,8 +89,7 @@ class WorkdayCalendar:
     def navigate(self, request):
         ''' Updates session and returns a new calendar
             based on an ajax request. '''
-        if not request.session.has_key('apt_manager') or \
-           not request.session['apt_manager'].has_store_employee() or \
+        if not valid_session_for_view(request, 'calendar') or \
            not request.session['apt_manager'].has_valid_year_month():
             raise ValueError
 
@@ -118,7 +118,7 @@ class WorkdayCalendar:
                 apt_man.cal_month = 1
                 apt_man.cal_year = year + 1
 
-        def move(action=action):
+        def move(action):
             actions = {'current': current,
                        'back': back,
                        'forward': forward}
@@ -128,11 +128,11 @@ class WorkdayCalendar:
                 return actions['current']()
             request.session['apt_manager'] = apt_man
 
-        return move()
+        return move(action)
 
     def get_schedule_context(self, request):
         context = {}
-        if request.session.has_key('apt_manager'):
+        if valid_session_for_view(request, 'schedule'):
             store = request.session['apt_manager'].store
             employee = request.session['apt_manager'].employee
             date = request.session['apt_manager'].target_date
@@ -146,8 +146,8 @@ class WorkdayCalendar:
             raise ValueError("Insufficient session data to create schedule context")
         return context
 
-    def encode_datestr(datestring):
-    ''' encodes a datestr to a datetime object '''
+    def encode_datestr(self, datestring):
+        ''' encodes a datestr to a datetime object '''
         try:
             date = datetime.strptime(datestring, '%Y_%m_%d')
         except:
@@ -170,13 +170,24 @@ class AppointmentManager:
         return bool(self.store)
 
     def _has_store_employee(self):
-        return self.has_store() and bool(self.employee)
+        return self._has_store() and bool(self.employee)
 
     def _has_store_employee_date(self):
-        return self.has_store_employee() and bool(self.target_date)
+        return self._has_store_employee() and bool(self.target_date)
 
     def _has_store_employee_date_time(self):
-        return has_store_employee_date() and bool(self.target_time)
+        return self._has_store_employee_date() and bool(self.target_time)
+
+    def ready_for_view(self, viewName):
+
+        viewNames = {
+                     'employee': self._has_store,
+                     'calendar': self._has_store_employee,
+                     'schedule': self._has_store_employee_date,
+                     'make_appointment': self._has_store_employee_date_time,
+                     }
+
+        return viewNames[viewName]()
 
     def has_valid_year_month(self): #used by for calendar navigation
         ''' checks if year and month are valid for creating calendar
@@ -184,14 +195,3 @@ class AppointmentManager:
         valid_month = self.cal_month >= 1 and self.cal_month <= 12
         valid_year = self.cal_year <= 9998 and self.cal_year > 1
         return valid_month and valid_year
-
-    def ready_for_view(self, viewName):
-
-        viewNames = {
-                     'employee': _has_store
-                     'calendar': _has_store_employee
-                     'schedule': _has_store_employee_date
-                     'make_appointment': _has_store_employee_date_times
-                     }
-
-        return viewNames[viewName]()

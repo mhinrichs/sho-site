@@ -1,12 +1,16 @@
 from django.core.exceptions import ValidationError
 
+# Session validation:
+
 def valid_session_for_view(request, viewName):
-    if not request.has_key('apt_manager'):
+    if not request.session.has_key('apt_manager'):
         return False
     elif not request.session['apt_manager'].ready_for_view(viewName):
         return False
     else:
         return True
+
+# Database validation:
 
 def valid_emp_id(emp_id):
     if len(emp_id) != 7:
@@ -18,11 +22,11 @@ def valid_emp_id(emp_id):
 
 def valid_store_id(store_id):
     if len(store_id) != 5:
-        raise ValidationError('Must be 7 characters long')
+        raise ValidationError('Must be 5 characters long')
     if store_id[0] != 's':
         raise ValidationError('Must start with "e"')
     if not store_id[1:].isalnum():
-        raise ValidationError('Must be "s" + 4 numbers. Ex. s0001, sss0002, etc.')
+        raise ValidationError('Must be "s" + 4 numbers. Ex. s0001, s0002, etc.')
 
 
 
