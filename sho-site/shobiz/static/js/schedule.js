@@ -1,10 +1,15 @@
 $(document).ready(function() {
 
   $('#timetable').on('click', '.clickable', function() {
-  $.get("/shobiz/schedule/appointment/",
+  $.post("/shobiz/schedule/",
     {time: this.id},
     function(response) {
-      window.location.href = "/shobiz/schedule/appointment/";
+      var json = JSON.parse(response)
+      if (json.result == 'success') {
+        window.location.href = "/shobiz/appointment/";
+      } else {
+        window.location.href = "/shobiz/calendar/";
+      };
     },
     "html"
   );

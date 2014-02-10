@@ -1,3 +1,4 @@
+// My calendar ajax function
 function to_calendar_ajax(action_string) {
   $('#cal').html('<center><img src="/static/loading.gif"></center>');
   $.get("ajax/",
@@ -10,6 +11,8 @@ function to_calendar_ajax(action_string) {
     "html"
   );
 };
+
+// DOM event handlers
 
 $(document).ready(function() {
 
@@ -26,10 +29,15 @@ $(document).ready(function() {
   });
 
   $('#cal').on('click', '.clickable', function() {
-  $.get("/shobiz/schedule/",
+  $.post("/shobiz/calendar/",
     {date: this.id},
     function(response) {
+      var json = JSON.parse(response);
+      if (json.result = 'success') {
       window.location.href = "/shobiz/schedule/";
+      } else {
+      window.location.href = "/shobiz/calendar/";
+      };
     },
     "html"
   );
@@ -43,4 +51,5 @@ $(document).ready(function() {
 
 
 
-
+
+

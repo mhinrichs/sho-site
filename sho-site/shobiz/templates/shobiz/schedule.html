@@ -4,11 +4,15 @@
 
 {% block base_content %}
 
+{% comment %} <!-- Django requires csrf tokens for AJAX posts even without forms -->  {% endcomment %}
+{% csrf_token %}
+
 {% addtoblock "css" %}
 <link rel="stylesheet" type="text/css" href="{% static "css/schedule.css" %}"/>
 {% endaddtoblock %}
 
 {% addtoblock "js" %}
+  <script src="{% static "js/djangocsrf.js" %}"></script>
   <script src="{% static "js/schedule.js" %}"></script>
 {% endaddtoblock %}
 

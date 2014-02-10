@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-
+import json
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
 from shobiz.utils import WorkdayCalendar, AppointmentManager
 from shobiz.forms import ReservationForm
@@ -46,7 +47,7 @@ def employee(request):
             request.session['apt_manager'].employee = DEFAULT_EMPLOYEE
             request.session.modified = True
             return redirect(calendar)
-        else:
+        else: #write a view for selecting employee
             return render(request, 'shobiz/employee.html', context)
 
 def calendar(request):
@@ -55,8 +56,15 @@ def calendar(request):
         return redirect(index)
 
     if request.method == 'POST':
-        # do something
-        pass
+        result = {}
+        if request.POST.has_key('date'):
+            date = WorkdayCalendar.encode_datestr(request.POST['date'])
+            request.session['apt_manager'].target_date = date
+            request.session.modified = True
+            result['result'] = 'success'
+        else:
+            result['result'] = 'failure'
+        return HttpResponse(json.dumps(result), content_type='application/json')
     else:
         d = datetime.now()
         request.session['apt_manager'].cal_year = d.year
@@ -74,34 +82,39 @@ def calendar_ajax(request):
     context = WorkdayCalendar.get_calendar_context(request)
     return render(request, 'shobiz/calendar_template.html', context)
 
-def schedule(request): #we need to back up and post to calendar from ajax
+def schedule(request):
     if not valid_session_for_view(request, 'calendar'):
         return redirect(index)
 
-    elif request.GET.has_key('date'):
-        date = WorkdayCalendar.encode_datestr(request.GET['date'])
-        request.session['apt_manager'].target_date = date
-        request.session.modified = True
-    else:
-        pass
+    if request.method == 'POST':
+        result = {}
+        time = TimeBlock.objects.get(pk = request.POST['time'])
+        #if the selected time block is not booked set as target_time
+        if time.is_booked == False:
+            request.session['apt_manager'].target_time = time
+            request.session.modified = True
+            result['result'] = 'success'
+        else:
+            result['result'] = 'failure'
+        return HttpResponse(json.dumps(result), content_type='application/json')
+
     context = WorkdayCalendar.get_schedule_context(request)
     return render(request, 'shobiz/schedule.html', context)
 
 
 def make_appointment(request):
     if not valid_session_for_view(request, 'make_appointment'):
-        return redirect(index)
+        return redirect(calendar)
 
-    else:
-        if request.method == 'POST':
-            form = ReservationForm(request.POST)
-            if form.is_valid():
-                form.save(commit=True)
-                return success(request)
-            else:
-                print(form.errors)
+    if request.method == 'POST':
+        form = ReservationForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return success(request)
         else:
-            form = ReservationForm()
+            print(form.errors)
+
+    form = ReservationForm()
     context = {'form': form}
     return render(request, 'shobiz/appointment.html', context)
 
