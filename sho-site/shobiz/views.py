@@ -102,15 +102,21 @@ def schedule(request):
     return render(request, 'shobiz/schedule.html', context)
 
 
-def make_appointment(request):
-    if not valid_session_for_view(request, 'make_appointment'):
+def appointment(request):
+    if not valid_session_for_view(request, 'appointment'):
         return redirect(calendar)
 
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
-            return success(request)
+            form = form.save(commit=False)
+            try:
+                form = request.session['apt_manager'].process_form(form)
+                form.save()
+            except ValueError:
+                print("hoooooly fuck")
+
+            return redirect(success)
         else:
             print(form.errors)
 
@@ -120,4 +126,7 @@ def make_appointment(request):
 
 def success(request):
     '''When customer confirms appointment sends confirmation mail to manager.'''
-    pass
+    return HttpResponse("sucessful nonsense")
+
+def failure(request):
+    return HttpResponse("failed nonsense")

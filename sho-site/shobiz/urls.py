@@ -10,8 +10,9 @@ urlpatterns = patterns('',
     url(r'^calendar/ajax/$', views.calendar_ajax, name='calendar_ajax'),
     url(r'^employee/$', views.employee, name='employee'),
     url(r'^schedule/$', views.schedule, name='schedule'),
-    url(r'^appointment/$', views.make_appointment, name='make_appointment'),
+    url(r'^appointment/$', views.appointment, name='appointment'),
     url(r'^success/$', views.success, name='success'),
+    url(r'^failure/$', views.failure, name='failure'),
 )
 
 

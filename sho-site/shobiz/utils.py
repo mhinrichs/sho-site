@@ -184,7 +184,7 @@ class AppointmentManager:
                      'employee': self._has_store,
                      'calendar': self._has_store_employee,
                      'schedule': self._has_store_employee_date,
-                     'make_appointment': self._has_store_employee_date_time,
+                     'appointment': self._has_store_employee_date_time,
                      }
 
         return viewNames[viewName]()
@@ -195,3 +195,17 @@ class AppointmentManager:
         valid_month = self.cal_month >= 1 and self.cal_month <= 12
         valid_year = self.cal_year <= 9998 and self.cal_year > 1
         return valid_month and valid_year
+
+    def process_form(self, form):
+        ''' process appointment form'''
+        print(self.target_time)
+        if self.target_time.is_booked == False:
+            tb = self.target_time
+            #set the timeblock for the form
+            form.timeblock = tb
+            #mark the timeblock as filled
+            tb.is_booked = True
+            tb.save()
+        else:
+            raise ValueError("Timeblock was already booked")
+        return form

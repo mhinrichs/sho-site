@@ -1,5 +1,5 @@
 from django.contrib import admin
-from shobiz.models import Store, Employee, Customer, TimeBlock, Workday, SurveyItem
+from shobiz.models import Store, Employee, Customer, TimeBlock, Workday, SurveyItem, Reservation
 from django.utils import timezone
 import datetime
 
@@ -50,4 +50,7 @@ class WorkdayAdmin(admin.ModelAdmin):
     list_filter = ['date']
 
 admin.site.register(Workday, WorkdayAdmin)
-admin.site.register(SurveyItem)
+admin.site.register(Reservation)
+admin.site.register(SurveyItem)
+
+
