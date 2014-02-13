@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import json
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
 from django.http import HttpResponse
 from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
 from shobiz.utils import WorkdayCalendar, AppointmentManager
@@ -9,6 +9,7 @@ from shobiz.validators import valid_session_for_view
 from shobiz.defaults import DEFAULT_STORE, DEFAULT_EMPLOYEE
 from calendar import Calendar
 from datetime import datetime
+import json
 
 # Settings
 WorkdayCalendar = WorkdayCalendar()
@@ -101,7 +102,6 @@ def schedule(request):
     context = WorkdayCalendar.get_schedule_context(request)
     return render(request, 'shobiz/schedule.html', context)
 
-
 def appointment(request):
     if not valid_session_for_view(request, 'appointment'):
         return redirect(calendar)
@@ -126,6 +126,11 @@ def appointment(request):
 
 def success(request):
     '''When customer confirms appointment sends confirmation mail to manager.'''
+    subject = "Shobiz: New Appointment"
+    text = "this is where some template stuff confirming the appointment would go"
+    server_email = "fake@email.com"
+    destination_email = ["target@email.com",]
+    send_mail(subject, text, server_email, destination_email, fail_silently = False)
     return HttpResponse("sucessful nonsense")
 
 def failure(request):

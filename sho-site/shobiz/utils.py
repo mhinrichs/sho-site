@@ -207,5 +207,6 @@ class AppointmentManager:
             tb.is_booked = True
             tb.save()
         else:
+            # I need to write an outcome where someone has booked the block while someone was trying to book it.
             raise ValueError("Timeblock was already booked")
         return form

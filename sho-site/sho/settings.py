@@ -7,9 +7,6 @@ gettext = lambda s: s #This is a lambda used with Django CMS
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = ((ls.admin_name, ls.admin_email),)
-MANAGERS = ADMINS
-
 PROJECT_PATH = os.path.split(os.path.abspath(os.path.dirname(__file__)))[0]
 
 TEMPLATE_ROOT = os.path.join(PROJECT_PATH, 'templates')
@@ -32,6 +29,15 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(PROJECT_PATH, "media")
 MEDIA_URL = '/media/'
 
+# Email Info
+ADMINS = ((ls.admin_name, ls.admin_email),)
+MANAGERS = ADMINS
+EMAIL_HOST = ls.email_host
+EMAIL_PORT = ls.email_port
+EMAIL_HOST_USER = ls.email_host_user
+EMAIL_HOST_PASSWORD = ls.email_host_password
+EMAIL_USE_TLS = True
+
 # Database Info
 DATABASES = {
     'default': {
@@ -39,8 +45,8 @@ DATABASES = {
         'NAME': ls.db_name,
         'USER': ls.db_user,
         'PASSWORD': ls.db_pass,
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'HOST': '',  # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '',  # Set to empty string for default.
     }
 }
 
@@ -192,4 +198,5 @@ LOGGING = {
 
 
 
-
+
+
