@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
-from django.core.mail import send_mail
+
 from django.http import HttpResponse
-from shobiz.models import Store, Employee, Customer, Workday, TimeBlock
+from shobiz.models import Store, Employee, Customer, Workday, TimeBlock, Reservation
 from shobiz.utils import WorkdayCalendar, AppointmentManager
 from shobiz.forms import ReservationForm
 from shobiz.validators import valid_session_for_view
@@ -110,12 +110,10 @@ def appointment(request):
         form = ReservationForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
-            try:
-                form = request.session['apt_manager'].process_form(form)
-                form.save()
-            except ValueError:
-                print("hoooooly fuck")
-
+            form = request.session['apt_manager'].process_form(form)
+            form.save()
+            request.session['apt_manager'].complete_registration = form
+            request.session.modified = True
             return redirect(success)
         else:
             print(form.errors)
@@ -125,13 +123,9 @@ def appointment(request):
     return render(request, 'shobiz/appointment.html', context)
 
 def success(request):
-    '''When customer confirms appointment sends confirmation mail to manager.'''
-    subject = "Shobiz: New Appointment"
-    text = "this is where some template stuff confirming the appointment would go"
-    server_email = "fake@email.com"
-    destination_email = ["target@email.com",]
-    send_mail(subject, text, server_email, destination_email, fail_silently = False)
-    return HttpResponse("sucessful nonsense")
+    appointment = request.session['apt_manager'].complete_registration
+    request.session['apt_manager'].send_confirmation_email(appointment)
+    return HttpResponse("Check your E-mail!")
 
 def failure(request):
-    return HttpResponse("failed nonsense")
+    return HttpResponse("Something went wrong!")

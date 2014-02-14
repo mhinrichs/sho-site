@@ -1,0 +1,9 @@
+This is a super awesome email to confirm that {{ person }} made a reservation.
+The details follow:
+
+{{ person }}
+{{ phone_number }}
+{{ date }}
+{{ stuff }}
+
+Please confirm this on the confirmation page.

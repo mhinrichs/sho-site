@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from datetime import date, datetime
 from calendar import Calendar
 from shobiz.models import Workday
@@ -165,6 +167,7 @@ class AppointmentManager:
         self.cal_year = None
         self.target_date = None
         self.target_time = None
+        self.complete_reservation = None
 
     def _has_store(self):
         return bool(self.store)
@@ -178,6 +181,11 @@ class AppointmentManager:
     def _has_store_employee_date_time(self):
         return self._has_store_employee_date() and bool(self.target_time)
 
+    def _has_complete_reservation(self):
+        print(bool(self.complete_reservation))
+        print(self.complete_reservation)
+        return bool(self.complete_reservation)
+
     def ready_for_view(self, viewName):
 
         viewNames = {
@@ -185,6 +193,7 @@ class AppointmentManager:
                      'calendar': self._has_store_employee,
                      'schedule': self._has_store_employee_date,
                      'appointment': self._has_store_employee_date_time,
+                     'success': self._has_complete_reservation,
                      }
 
         return viewNames[viewName]()
@@ -210,3 +219,15 @@ class AppointmentManager:
             # I need to write an outcome where someone has booked the block while someone was trying to book it.
             raise ValueError("Timeblock was already booked")
         return form
+
+    def send_confirmation_email(self, appointment):
+        email_context = {}
+        email_context['person'] = appointment.name
+        email_context['phone_number'] = appointment.phone
+        email_context['date'] = appointment.timeblock.__unicode__()
+        email_context['stuff'] = ''
+        subject = "Shobiz: New Appointment"
+        text = render_to_string('shobiz/confirm_reservation.txt', email_context)
+        server_email = "blank@email.com"
+        destination_email = ["blank@email.com",]
+        send_mail(subject, text, server_email, destination_email, fail_silently = False)
