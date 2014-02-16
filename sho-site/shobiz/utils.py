@@ -221,13 +221,16 @@ class AppointmentManager:
         return form
 
     def send_confirmation_email(self, appointment):
+
         email_context = {}
         email_context['person'] = appointment.name
         email_context['phone_number'] = appointment.phone
         email_context['date'] = appointment.timeblock.__unicode__()
-        email_context['stuff'] = ''
+        email_context['services'] = appointment.services.all()
+        email_context['customer_comment'] = appointment.customer_comment
+
         subject = "Shobiz: New Appointment"
         text = render_to_string('shobiz/confirm_reservation.txt', email_context)
-        server_email = "blank@email.com"
-        destination_email = ["blank@email.com",]
+        server_email = "shobiz.appointment@email.com"
+        destination_email = ["mhinrichs@gmail.com",]
         send_mail(subject, text, server_email, destination_email, fail_silently = False)

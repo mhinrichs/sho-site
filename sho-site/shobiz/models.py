@@ -148,6 +148,7 @@ class Reservation(models.Model):
     name = models.CharField(max_length=50)
     phone = models.CharField(max_length=13)
     services = models.ManyToManyField(SurveyItem, null=True)
+    customer_comment = models.CharField(max_length=255)
 
     def __unicode__(self):
         return "{0} reservation @ {1}".format(self.name, self.timeblock.__unicode__())

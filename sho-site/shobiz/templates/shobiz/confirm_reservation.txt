@@ -1,9 +1,14 @@
-This is a super awesome email to confirm that {{ person }} made a reservation.
+This is an email to confirm that {{ person }} made a reservation.
 The details follow:
 
 {{ person }}
 {{ phone_number }}
 {{ date }}
-{{ stuff }}
+{% if services %}
+  {% for service in services %}
+    {{service}}
+  {% endfor %}
+{% endif %}
+{{ customer_comment }}
 
 Please confirm this on the confirmation page.

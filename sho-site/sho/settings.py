@@ -32,6 +32,8 @@ MEDIA_URL = '/media/'
 # Email Info
 ADMINS = ((ls.admin_name, ls.admin_email),)
 MANAGERS = ADMINS
+SERVER_EMAIL = ls.server_email
+DEFAULT_FROM_EMAIL = ls.default_email
 EMAIL_HOST = ls.email_host
 EMAIL_PORT = ls.email_port
 EMAIL_HOST_USER = ls.email_host_user

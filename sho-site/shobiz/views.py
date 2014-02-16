@@ -109,6 +109,7 @@ def appointment(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
+            print(form.cleaned_data['services'])
             form = form.save(commit=False)
             form = request.session['apt_manager'].process_form(form)
             form.save()
