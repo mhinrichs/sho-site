@@ -205,19 +205,34 @@ class AppointmentManager:
         valid_year = self.cal_year <= 9998 and self.cal_year > 1
         return valid_month and valid_year
 
-    def process_form(self, form):
+    def process_form(self, request, form):
         ''' process appointment form'''
-        print(self.target_time)
+
         if self.target_time.is_booked == False:
+
+            # Extract many-to-many objects and add to form if any exist
+            if form.cleaned_data.has_key('services'):
+                data = [x for x in form.cleaned_data['services']]
+
+            # Prepare the form for the Reservation and add many-to-many objects.
+            form = form.save(commit=False)
+
+            # Mark the sessions timeblock as full
             tb = self.target_time
-            #set the timeblock for the form
+            print(tb)
             form.timeblock = tb
-            #mark the timeblock as filled
+            print(form.timeblock)
             tb.is_booked = True
             tb.save()
-        else:
-            # I need to write an outcome where someone has booked the block while someone was trying to book it.
-            raise ValueError("Timeblock was already booked")
+
+            # Save the form and add many to many relationships
+            form.save()
+            if data:
+                form.services.add(*data)
+
+            # Add the reservation to the session
+            request.session['apt_manager'].complete_reservation = form
+
         return form
 
     def send_confirmation_email(self, appointment):
@@ -231,6 +246,6 @@ class AppointmentManager:
 
         subject = "Shobiz: New Appointment"
         text = render_to_string('shobiz/confirm_reservation.txt', email_context)
-        server_email = "shobiz.appointment@email.com"
-        destination_email = ["mhinrichs@gmail.com",]
+        server_email = "blank@email.com"
+        destination_email = ["blank@email.com",]
         send_mail(subject, text, server_email, destination_email, fail_silently = False)

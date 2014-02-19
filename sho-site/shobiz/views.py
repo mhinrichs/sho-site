@@ -109,13 +109,12 @@ def appointment(request):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data['services'])
-            form = form.save(commit=False)
-            form = request.session['apt_manager'].process_form(form)
-            form.save()
-            request.session['apt_manager'].complete_registration = form
+            form = request.session['apt_manager'].process_form(request, form)
             request.session.modified = True
-            return redirect(success)
+            if request.session['apt_manager'].complete_reservation:
+                return redirect(success)
+            else:
+                return redirect(failure)
         else:
             print(form.errors)
 
@@ -124,7 +123,7 @@ def appointment(request):
     return render(request, 'shobiz/appointment.html', context)
 
 def success(request):
-    appointment = request.session['apt_manager'].complete_registration
+    appointment = request.session['apt_manager'].complete_reservation
     request.session['apt_manager'].send_confirmation_email(appointment)
     return HttpResponse("Check your E-mail!")
 

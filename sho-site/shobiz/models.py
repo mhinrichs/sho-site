@@ -152,4 +152,5 @@ class Reservation(models.Model):
 
     def __unicode__(self):
         return "{0} reservation @ {1}".format(self.name, self.timeblock.__unicode__())
-
+
+
