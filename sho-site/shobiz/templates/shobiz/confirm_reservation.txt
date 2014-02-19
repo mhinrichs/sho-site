@@ -3,12 +3,11 @@ The details follow:
 
 Name: {{ person }}
 Phone: {{ phone_number }}
-Date: {{ date }}
-{% if services %}
+Date: {{ date }}{% if services %}
 The customer selected the following services:
-{% for service in services %}{{service}}{% endfor %}
-{% endif %}
-The customer added the following note:
+{% for service in services %}★{{service}}
+{% endfor %}{% endif %}The customer added the following note:
+ーーーーーーーーーーーーーーー
 {{ customer_comment }}
-
+ーーーーーーーーーーーーーーー
 Please confirm this on the confirmation page.

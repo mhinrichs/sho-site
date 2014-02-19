@@ -246,6 +246,6 @@ class AppointmentManager:
 
         subject = "Shobiz: New Appointment"
         text = render_to_string('shobiz/confirm_reservation.txt', email_context)
-        server_email = "blank@email.com"
-        destination_email = ["blank@email.com",]
+        server_email = "shobiz.appointment@gmail.com"
+        destination_email = ["mhinrichs@gmail.com",]
         send_mail(subject, text, server_email, destination_email, fail_silently = False)
