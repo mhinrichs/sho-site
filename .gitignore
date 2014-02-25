@@ -3,4 +3,3 @@
 *.pot
 *.pyc
 local_settings.py
-migrations/
