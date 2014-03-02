@@ -13,7 +13,7 @@ admin.site.register(Store, StoreAdmin)
 
 class EmployeeAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Profile', {'fields':['name', 'romaji', 'birthday', 'emp_id']}),
+        ('Profile', {'fields':['name', 'romaji', 'birthday', 'user', 'emp_id']}),
         ('Contact Information', {'fields': ['post_code', 'address1', 'address2', 'phone', 'email' ]}),
         ('Data Entry', {'fields': ['entry_date', 'last_edited', 'valid_profile'], 'classes': ['collapse']}),
         ]
@@ -23,7 +23,7 @@ admin.site.register(Employee, EmployeeAdmin)
 class CustomerAdmin(admin.ModelAdmin):
 
     fieldsets = [
-        ('Profile', {'fields':['name', 'romaji', 'birthday']}),
+        ('Profile', {'fields':['name', 'romaji', 'birthday', 'user']}),
         ('Contact Information', {'fields': ['post_code', 'address1', 'address2', 'phone', 'email' ]}),
         ('Data Entry', {'fields': ['entry_date', 'last_edited', 'valid_profile'], 'classes': ['collapse']}),
         ]
@@ -52,5 +52,7 @@ class WorkdayAdmin(admin.ModelAdmin):
 admin.site.register(Workday, WorkdayAdmin)
 admin.site.register(Reservation)
 admin.site.register(SurveyItem)
+
+
 
 

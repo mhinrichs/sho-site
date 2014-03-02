@@ -2,7 +2,7 @@
 
 import os
 import local_settings as ls
-gettext = lambda s: s #This is a lambda used with Django CMS
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -58,14 +58,18 @@ ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+
 TIME_ZONE = 'Asia/Tokyo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
+# https://docs.djangoproject.com/en/1.4/topics/i18n/translation/#how-django-discovers-language-preference
+
 LANGUAGE_CODE = 'ja-jp'
-LANGUAGES = [ #CMS languages
-    ('ja', 'Japanese'),
-]
+# ugettext = lambda s: s #This is a lambda used with Django CMS to wrap the language setting
+# LANGUAGES = [ #CMS languages
+#     ('ja', ugettext('Japanese')),
+# ]
 
 SITE_ID = 1
 
@@ -79,8 +83,6 @@ USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
-
-
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -100,13 +102,14 @@ TEMPLATE_LOADERS = (
     #'django.template.loaders.eggs.Loader',
 )
 
-# Added for use with Django CMS and Zinnia
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
+    'allauth.account.context_processors.account',
+    'allauth.socialaccount.context_processors.socialaccount',
     'cms.context_processors.media',
     'sekizai.context_processors.sekizai',
     'zinnia.context_processors.version',
@@ -161,15 +164,38 @@ INSTALLED_APPS = (
     'cms.plugins.text',
     'cms.plugins.video',
     'cms.plugins.twitter',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
 )
 
-#ZINNIA_ENTRY_BASE_MODEL = 'cmsplugin_zinnia.placeholder.EntryPlaceholder'
+# auth and allauth settings
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
+SITE_ID = 3
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend"
+)
+
+LOGIN_REDIRECT_URL = 'shobiz/'
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'SCOPE': ['email'],
+        'METHOD': 'oauth2'
+    }
+}
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'THExSHOW'
+ACCOUNT_PASSWORD_MIN_LENGTH = 6
+
+# Logging
 
 LOGGING = {
     'version': 1,
@@ -194,11 +220,4 @@ LOGGING = {
         },
     }
 }
-
-
-
-
-
-
-
 

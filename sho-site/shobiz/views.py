@@ -18,6 +18,12 @@ USE_DEFAULT_EMPLOYEE = True
 
 # Views
 
+def login(request):
+    context = {}
+    request.session.flush()
+    request.session['apt_manager'] = AppointmentManager()
+    return render(request, 'shobiz/login.html', context)
+
 def index(request):
     # perform initial setup
     context = {}

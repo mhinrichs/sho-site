@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.contrib.auth.models import User
 import shobiz.validators as validate
 
 class BaseProfile(models.Model):
@@ -12,9 +13,10 @@ class BaseProfile(models.Model):
     phone = models.CharField(max_length=13)
     email = models.CharField(max_length=35)
     entry_date = models.DateTimeField()
-    last_edited = models.DateTimeField(blank=True)
+    last_edited = models.DateTimeField(blank=True, null=True)
     valid_profile = models.BooleanField(default=True)
     note = models.CharField(max_length = 150, blank=True)
+
 
     class Meta:
         abstract = True
@@ -25,6 +27,8 @@ class BaseProfile(models.Model):
 class Person(BaseProfile):
 
     lastname = models.CharField(max_length=30, blank = False)
+    user = models.OneToOneField(User, null=True, blank=True)
+    picture = models.ImageField(upload_to='profile_images', null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -46,6 +50,7 @@ class Employee(Person):
     # fields
     emp_id = models.CharField(max_length=7, unique=True, validators=[validate.valid_emp_id])
     birthday = models.DateField(blank=False)
+
 
 class Customer(Person):
 
@@ -88,7 +93,7 @@ class Workday(models.Model):
     def to_string(self):
         return self.date.strftime("%Y_%m_%d")
 
-    def get_status(self): #consider moving this
+    def get_status(self): #consider moving this // this has bugs
         ''' Returns busy status of a workday '''
         blocks = self.timeblock_set.all()
         total = len(blocks)
