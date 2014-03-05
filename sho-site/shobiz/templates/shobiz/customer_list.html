@@ -1,8 +1,12 @@
-{% block content %}
-<h2> Customers! </h2>
+{% extends "shobiz/staff_base.html" %}
+
+{% block base_content %}
+<h2> Customer List </h2>
 <ul>
     {% for customer in customers %}
-    <li> {{ customer.name }} {{ customer.phone }} <a href="/staff/customers/{{ customer.pk }}/"> Detail </a> </li>
+    <li> {{ customer.name }} {{ customer.phone }}
+        <a href="/staff/customers/{{ customer.pk }}/">Detail</a>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}

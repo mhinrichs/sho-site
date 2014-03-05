@@ -71,7 +71,7 @@ LANGUAGE_CODE = 'ja-jp'
 #     ('ja', ugettext('Japanese')),
 # ]
 
-SITE_ID = 1
+SITE_ID = 3
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

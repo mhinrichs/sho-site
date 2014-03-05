@@ -1,3 +1,53 @@
 <!DOCTYPE html>
 
-{% block base_content %}{% endblock %}
+{% load static sekizai_tags %}
+<html>
+
+<head>
+  {% render_block "css" %}
+  <title> {%block title%} Shobiz Staff Menu {% endblock %} </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% addtoblock "css"%}
+  <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap_slate.min.css" %}"/>
+  {% endaddtoblock %}
+
+  {% addtoblock "js" %}
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="{% static "js/bootstrap.min.js" %}"></script>
+  {% endaddtoblock %}
+
+</head>
+
+<body>
+
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Shobiz Staff</a>
+      </div>
+      <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-left">
+              {% csrf_token %}
+          <div class="form-group">
+            <input name="phone" type="text" placeholder="Search Phone Number" value="" class="form-control">
+          </div>
+              <button type="submit" formmethod="post" formaction="/staff/customers/" class="btn btn-success">Search</button>
+        </form>
+      </div><!--/.navbar-collapse -->
+    </div>
+  </div>
+  <hr><hr>
+  {% block base_content %}{% endblock %}
+
+  {% render_block "js" %}
+
+</body>
+
+</html>

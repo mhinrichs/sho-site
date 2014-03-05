@@ -15,6 +15,14 @@ class CustomerListView(ListView):
     model = Customer
     context_object_name = 'customers'
 
+    def post(self, request):
+        if request.POST.has_key('phone'):
+            context = {}
+            p = request.POST['phone']
+            c = Customer.objects.get(phone=p)
+            context['customer'] = c
+            return CustomerDetailView.as_view()
+
 class CustomerDetailView(DetailView):
     #template_name = 'shobiz/customer_detail.html'
     model = Customer
