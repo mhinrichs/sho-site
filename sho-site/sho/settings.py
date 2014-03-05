@@ -146,8 +146,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
-    'shobiz', #app for sho
-    #'shobizpos', #register app for sho
+    'shobiz', # app for sho
+    'staff', # staff menu for shobiz
+    #'shobizpos', eventual point of sale app for shobiz
     'cms',
     'mptt',
     'menus',
@@ -172,7 +173,6 @@ INSTALLED_APPS = (
 
 # auth and allauth settings
 
-SITE_ID = 3
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",

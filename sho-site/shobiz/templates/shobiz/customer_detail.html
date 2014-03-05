@@ -1,0 +1,21 @@
+{% extends "shobiz/staff_base.html" %}
+
+{% comment %} CustomerDetail for shobiz_staff {% endcomment %}
+
+{% block base_content %}
+
+<h2> {{ customer.name }} </h2>
+<ul>
+    <li> Pronunciation:
+        {{customer.romaji}} </li>
+
+    <li> Address:
+        {{customer.address1}}
+        {{customer.address2}}
+        {{customer.post_code}} </li>
+    <li> {{customer.phone}} </li>
+    <li> {{customer.email}} </li>
+    <li> {{customer.user}} </li>
+</ul>
+
+{% endblock %}

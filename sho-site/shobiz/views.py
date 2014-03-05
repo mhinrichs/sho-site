@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
+# views.py for shobiz
+
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
-from shobiz.models import Store, Employee, Customer, Workday, TimeBlock, Reservation
-from shobiz.utils import WorkdayCalendar, AppointmentManager
-from shobiz.forms import ReservationForm
-from shobiz.validators import valid_session_for_view
-from shobiz.defaults import DEFAULT_STORE, DEFAULT_EMPLOYEE
+from django.views.generic import TemplateView
+from .models import Store, Employee, Customer, Workday, TimeBlock, Reservation
+from .utils import WorkdayCalendar, AppointmentManager
+from .forms import ReservationForm
+from .validators import valid_session_for_view
+from .defaults import DEFAULT_STORE, DEFAULT_EMPLOYEE
 from calendar import Calendar
 from datetime import datetime
 import json
@@ -17,6 +20,20 @@ USE_DEFAULT_STORE = True
 USE_DEFAULT_EMPLOYEE = True
 
 # Views
+
+class CBVTestView(TemplateView, object):
+    template_name='shobiz/test.html'
+
+    def get(self, request, template_name = template_name, *args, **kwargs):
+        context = {}
+        request.session.flush()
+        request.session['apt_manager'] = AppointmentManager()
+        if USE_DEFAULT_STORE:
+            request.session['apt_manager'].store = DEFAULT_STORE
+            context['store'] = request.session['apt_manager'].store
+            request.session.modified = True
+            return render(request, template_name, context)
+
 
 def login(request):
     context = {}

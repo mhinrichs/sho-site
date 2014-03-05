@@ -1,3 +1,5 @@
+# urls.py for sho-site
+
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.conf.urls.i18n import i18n_patterns
@@ -11,8 +13,9 @@ urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^shobiz/', include('shobiz.urls')),
-    url(r'^weblog/', include('zinnia.urls')),
+    url(r'^staff/', include('staff.urls')),
     url(r'^comments/', include('django.contrib.comments.urls')),
+    url(r'^weblog/', include('zinnia.urls')),
     url(r'^', include('cms.urls')), # Must be at end of urlpatterns
 )
 
@@ -23,4 +26,5 @@ if settings.DEBUG:
     url(r'', include('django.contrib.staticfiles.urls')),
 ) + urlpatterns
 
-
+
+
