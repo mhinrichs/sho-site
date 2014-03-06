@@ -1,0 +1,24 @@
+{% extends "staff/staff_base.html" %}
+
+{% block base_content %}
+
+<p>Customer form!</p>
+  <form id="customer_form" method="post" action="/shobiz/appointment/">
+    {% csrf_token %}
+
+    {% for hidden in form.hidden_fields %}
+    {{ hidden }}
+    {% endfor %}
+
+    {% for field in form.visible_fields %}
+
+    {{ field.help_text}}
+    <p>{{ field }}</p>
+    {{ field.errors }}
+
+    {% endfor %}
+
+  <p><input type="submit" name="submit" value="Register Customer" /></p>
+  </form>
+
+{% endblock %}
