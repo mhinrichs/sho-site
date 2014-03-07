@@ -10,5 +10,5 @@ urlpatterns = patterns('',
     url(r'^customers/(?P<pk>\d+)/$', views.CustomerDetailView.as_view(), name='customer_detail'),
     url(r'^customers/create/$', views.CustomerCreateView.as_view(), name='customer_create'),
     url(r'^customers/phone/$', views.CustomerDetailByPhone.as_view(), name='customer_phone_lookup'),
-    url(r'^customers/update/(?P<pk>\d+)/$', views.CustomerUpdateView.as_view(), name='customer_update'),
+    url(r'^customers/edit/(?P<pk>\d+)/$', views.CustomerUpdateView.as_view(), name='customer_update'),
     )

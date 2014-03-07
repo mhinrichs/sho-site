@@ -31,11 +31,13 @@ class CustomerCreateView(CreateView):
     template_name = 'staff/customer_form.html'
     form_class = CustomerForm
     context_object_name = 'customer'
+    success_url= "/staff/"
 
 class CustomerUpdateView(UpdateView):
     template_name = 'staff/customer_form.html'
     model = Customer
     context_object_name = 'customer'
+    success_url= "/staff/"
 
 class CustomerDetailByPhone(TemplateView):
     template_name = 'staff/customer_detail.html'

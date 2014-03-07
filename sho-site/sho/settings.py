@@ -3,7 +3,6 @@
 import os
 import local_settings as ls
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -169,6 +168,7 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
+    'bootstrap3',
 )
 
 # auth and allauth settings
@@ -180,7 +180,7 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend"
 )
 
-LOGIN_REDIRECT_URL = 'shobiz/'
+LOGIN_REDIRECT_URL = '/shobiz/'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {

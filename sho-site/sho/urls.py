@@ -9,13 +9,13 @@ from django.conf import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^shobiz/', include('shobiz.urls')),
     url(r'^staff/', include('staff.urls')),
     url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^weblog/', include('zinnia.urls')),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^', include('cms.urls')), # Must be at end of urlpatterns
 )
 

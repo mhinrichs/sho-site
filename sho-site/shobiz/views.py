@@ -34,13 +34,6 @@ class CBVTestView(TemplateView, object):
             request.session.modified = True
             return render(request, template_name, context)
 
-
-def login(request):
-    context = {}
-    request.session.flush()
-    request.session['apt_manager'] = AppointmentManager()
-    return render(request, 'shobiz/login.html', context)
-
 def index(request):
     # perform initial setup
     context = {}

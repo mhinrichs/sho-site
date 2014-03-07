@@ -34,7 +34,7 @@
       </div>
       <div class="col-md-6">
         <p>Appointment form!</p>
-        <form id="appointment_form" method="post" action="/shobiz/appointment/">
+        <form id="appointment_form" method="post" action="/shobiz/appointment/" action="{{ action }}">
 
           {% csrf_token %}
           {% for hidden in form.hidden_fields %}
