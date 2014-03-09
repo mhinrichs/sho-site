@@ -1,10 +1,16 @@
 {% extends "staff/staff_base.html" %}
 
 {% block base_content %}
-<h2> Customers! </h2>
+<h2>Customer List</h2>
 <ul>
-    {% for customer in customers %}
-    <li> {{ customer.name }} {{ customer.phone }} <a href="/staff/customers/{{ customer.pk }}/"> Detail </a> </li>
+  {% for customer in customers %}
+    <li><h3>{{ customer.name }} {{ customer.lastname }} {{ customer.phone }}</h3></li>
+    <form action="/staff/customer/{{ customer.pk }}/">
+      <input type="submit" value="Customer Information" class="btn btn-warning">
+    </form>
+    <form action="/staff/customer/update/{{ customer.pk }}/">
+      <input type="submit" value="Edit Customer" class="btn btn-danger">
+    </form>
     {% endfor %}
 </ul>
 {% endblock %}

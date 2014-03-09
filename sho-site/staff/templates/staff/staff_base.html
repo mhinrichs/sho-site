@@ -8,6 +8,7 @@
   <title> {%block title%} Shobiz Staff Menu {% endblock %} </title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   {% addtoblock "css"%}
   <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap_slate.min.css" %}"/>
   {% endaddtoblock %}
@@ -33,14 +34,14 @@
         <a class="navbar-brand" href="#">Shobiz Staff</a>
       </div>
       <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-left">
+        <form class="navbar-form navbar-left">
               {% csrf_token %}
-          <div class="form-group">
-            <input name="phone" type="text" placeholder="Search Phone Number" value="" class="form-control">
-          </div>
-              <button type="submit" formmethod="post" formaction="/staff/customers/phone/" class="btn btn-success">Search</button>
+        <div class="form-group">
+          <input name="phone" type="text" placeholder="Search Phone Number" value="" class="form-control">
+        </div>
+            <button type="submit" formmethod="post" formaction="/staff/customer/phone/" class="btn btn-success">Search</button>
 
-          </form>
+        </form>
       </div><!--/.navbar-collapse -->
     </div>
   </div>

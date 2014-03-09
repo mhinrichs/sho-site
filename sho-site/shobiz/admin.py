@@ -6,27 +6,30 @@ import datetime
 class StoreAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Store Information', {'fields':['name', 'romaji', 'store_id', 'post_code', 'address1', 'address2', 'phone', 'email' ]}),
-        ('Data Entry', {'fields': ['entry_date', 'last_edited', 'valid_profile'], 'classes': ['collapse']}),
+        ('Data Entry', {'fields': ['created', 'modified', 'valid_profile'], 'classes': ['collapse']}),
         ]
+    readonly_fields = ('created', 'modified')
 
 admin.site.register(Store, StoreAdmin)
 
 class EmployeeAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Profile', {'fields':['name', 'romaji', 'birthday', 'user', 'emp_id']}),
+        ('Profile', {'fields':['name', 'lastname', 'romaji', 'birthday', 'user', 'emp_id']}),
         ('Contact Information', {'fields': ['post_code', 'address1', 'address2', 'phone', 'email' ]}),
-        ('Data Entry', {'fields': ['entry_date', 'last_edited', 'valid_profile'], 'classes': ['collapse']}),
+        ('Data Entry', {'fields': ['created', 'modified', 'valid_profile'], 'classes': ['collapse']}),
         ]
+    readonly_fields = ('created', 'modified')
 
 admin.site.register(Employee, EmployeeAdmin)
 
 class CustomerAdmin(admin.ModelAdmin):
 
     fieldsets = [
-        ('Profile', {'fields':['name', 'romaji', 'birthday', 'user']}),
+        ('Profile', {'fields':['name', 'lastname', 'romaji', 'birthday', 'user']}),
         ('Contact Information', {'fields': ['post_code', 'address1', 'address2', 'phone', 'email' ]}),
-        ('Data Entry', {'fields': ['entry_date', 'last_edited', 'valid_profile'], 'classes': ['collapse']}),
+        ('Data Entry', {'fields': ['created', 'modified', 'valid_profile'], 'classes': ['collapse']}),
         ]
+    readonly_fields = ('created', 'modified')
 
 admin.site.register(Customer, CustomerAdmin)
 
@@ -52,6 +55,8 @@ class WorkdayAdmin(admin.ModelAdmin):
 admin.site.register(Workday, WorkdayAdmin)
 admin.site.register(Reservation)
 admin.site.register(SurveyItem)
+
+
 
 
 

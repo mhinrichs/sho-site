@@ -12,8 +12,8 @@ class BaseProfile(models.Model):
     address2 = models.CharField(max_length=100, blank = True)
     phone = models.CharField(max_length=13)
     email = models.CharField(max_length=35)
-    entry_date = models.DateTimeField()
-    last_edited = models.DateTimeField(blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
     valid_profile = models.BooleanField(default=True)
     note = models.CharField(max_length = 150, blank=True)
 

@@ -1,8 +1,39 @@
 {% extends "staff/staff_base.html" %}
 
 {% block base_content %}
-<h1>Staff Page</h1>
-
-<a href="/staff/customers/">Customer List</a>
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="jumbotron">
+        <h1>Welcome to the Staff Menu!</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 col-md-offset-1">
+      <h2>Customer Related</h2>
+        <ul>
+            <li><a href="customer/">List of all customers.</a></li>
+            <li><a href="customer/create/">Create customer record.</a></li>
+        </ul>
+    </div>
+    <div class="col-md-3 col-md-offset-1">
+        <h2>Schedule Related</h2>
+        <ul>
+            <li><a href="customer/">List of all customers.</a></li>
+            <li><a href="customer/create/">Create customer record.</a></li>
+        </ul>
+    </div>
+    <div class="col-md-3 col-md-offset-1">
+        <h2>Appointment Related</h2>
+        <ul>
+            <li><a href="customer/">List of all customers.</a></li>
+            <li><a href="customer/create/">Create customer record.</a></li>
+        </ul>
+    </div>
+  </div> <!--row-->
+</div> <!--container-->
 
 {% endblock %}

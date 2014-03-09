@@ -2,18 +2,19 @@
 
 {% block base_content %}
 
-<h2> {{ customer.name }} </h2>
+<h2> {{ customer.name }} {{ customer.lastname }} </h2>
 <ul>
-    <li> Pronunciation:
-        {{customer.romaji}} </li>
-
     <li> Address:
         {{customer.address1}}
         {{customer.address2}}
         {{customer.post_code}} </li>
     <li> {{customer.phone}} </li>
     <li> {{customer.email}} </li>
-    <li> {{customer.user}} </li>
+    <li> Username: {{customer.user}} </li>
 </ul>
+
+<form action="/staff/customer/update/{{ customer.pk }}/">
+    <input type="submit" value="Edit Customer" class="btn btn-danger">
+</form>
 
 {% endblock %}
