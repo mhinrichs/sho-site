@@ -1,31 +1,39 @@
-{% load cms_tags sekizai_tags %}
-<html>
-
-<head>
-    {% render_block "css" %}
-    <title> {%block title%} The Sho(w) Mainpage {% endblock %} </title>
-</head>
-
-<body>
+<!DOCTYPE html>
+{% load cms_tags sekizai_tags static %}
 
 {% addtoblock "css"%}
 <link rel="stylesheet" type="text/css" href="/media/css/basepage.css"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/carousel.css" %}"/>
 {% endaddtoblock %}
-<div id="pagecontent">
 
-    {% cms_toolbar %}
-    {% block banner %}{% endblock %}
-    {% block base_content %}{% endblock %}
-    {% block trail_content %}{% endblock %}
-    {% addtoblock "js" %}
-    <script src="/static/js/jquery-2.0.3.min.js' %}"></script>
-    <script src="/static/js/bootstrap.min.js' %}"></script>
-    {% endaddtoblock%}
-    {% render_block "js" %}
+{% addtoblock "js" %}
+<script src="{% static "js/jquery-2.0.3.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/holder.js" %}"></script>
+{% endaddtoblock%}
 
-</div>
+<html>
 
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for Hair Produce The Show">
+    <meta name="author" content="Matthew Hinrichs: 2014">
+    {% render_block "css" %}
+    <title>Hair Produce The Show</title>
+  </head>
+
+  <body>
+    <div id="pagecontent">
+      {% cms_toolbar %}
+      {% block banner_content %}{% endblock %}
+      {% block base_content %}{% endblock %}
+      {% block footer_content %}{% endblock %}
+
+      {% render_block "js" %}
+    </div>
+  </body>
 
 </html>
-

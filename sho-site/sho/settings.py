@@ -169,6 +169,7 @@ INSTALLED_APPS = (
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'bootstrap3',
+    'photologue',
 )
 
 # auth and allauth settings
