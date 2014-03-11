@@ -200,12 +200,12 @@ ACCOUNT_PASSWORD_MIN_LENGTH = 6
 
 # Django-CMS
 
-CMS_PLACEHOLDER_CONF = {
-    'mainphoto': {
-        'plugins': ('PicturePlugin'),
-        'extra_context': {"width":500},
-    },
-}
+CMS_STYLE_NAMES = (
+    ('info', "info"),
+    ('new', "new"),
+    ('hint', "hint"),
+    ('mainphoto', "mainphoto"),
+)
 
 # Logging
 

@@ -44,3 +44,14 @@
   margin-right: 25px ;
   margin-bottom: 50px ;
 }
+
+.img_holder {
+    width: 400px;
+    height: 400px;
+}
+
+/* resize images */
+.img_holder img {
+    width: 100%;
+    height: auto;
+}

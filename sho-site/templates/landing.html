@@ -10,6 +10,11 @@
 {% endaddtoblock %}
 
 {% block banner_content %}
+
+{% addtoblock "css" %}
+<link rel="stylesheet" type="text/css" href="/media/css/landing.css"/>
+{% endaddtoblock %}
+
 <div class="navbar-wrapper">
   <div class="container">
     <div class="navbar navbar-inverse navbar-static-top" role="navigation">
@@ -128,7 +133,7 @@
       <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
     </div>
     <div class="col-md-5">
-      <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+      <div class="img_holder">{% placeholder "mainphoto1" %}</div>
     </div>
   </div>
 
@@ -136,7 +141,7 @@
 
   <div class="row featurette">
     <div class="col-md-5">
-      <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+      <div class="img_holder">{% placeholder "mainphoto2" %}</div>
     </div>
     <div class="col-md-7">
       <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
@@ -152,7 +157,7 @@
       <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
     </div>
     <div class="col-md-5">
-        <div id="img_holder">{% placeholder "mainphoto" %}</div>
+        <div class="img_holder">{% placeholder "mainphoto3" %}</div>
     </div>
   </div>
 
