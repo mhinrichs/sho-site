@@ -96,6 +96,7 @@ SECRET_KEY = ls.secret_key
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
+    'app_namespace.Loader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     #'django.template.loaders.eggs.Loader',
@@ -153,6 +154,7 @@ INSTALLED_APPS = (
     'menus',
     'south',
     'sekizai',
+    'zinnia_bootstrap',
     'zinnia',
     'tagging',
     'cmsplugin_zinnia',
@@ -181,7 +183,7 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend"
 )
 
-LOGIN_REDIRECT_URL = '/shobiz/'
+LOGIN_REDIRECT_URL = '/'
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
@@ -195,6 +197,15 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = 'THExSHOW'
 ACCOUNT_PASSWORD_MIN_LENGTH = 6
+
+# Django-CMS
+
+CMS_PLACEHOLDER_CONF = {
+    'mainphoto': {
+        'plugins': ('PicturePlugin'),
+        'extra_context': {"width":500},
+    },
+}
 
 # Logging
 

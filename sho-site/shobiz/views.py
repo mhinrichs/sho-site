@@ -37,7 +37,6 @@ class CBVTestView(TemplateView, object):
 def index(request):
     # perform initial setup
     context = {}
-    request.session.flush()
     request.session['apt_manager'] = AppointmentManager()
 
     if request.method == 'POST':
