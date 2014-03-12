@@ -5,14 +5,14 @@
 <div id="banner"> {% placeholder banner_content %} </div>
 {% endblock %}
 
-{% addtoblock "css" %}
-<link rel="stylesheet" type="text/css" href="/media/css/landing.css"/>
-{% endaddtoblock %}
-
 {% block banner_content %}
 
 {% addtoblock "css" %}
-<link rel="stylesheet" type="text/css" href="/media/css/landing.css"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/landing.css" %}"/>
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+<script src="{% static "js/landing.js" %}"></script>
 {% endaddtoblock %}
 
 <div class="navbar-wrapper">
@@ -33,18 +33,9 @@
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
+            <li><a href="/shobiz/">予約</a></li>
+            <li><a href="/weblog/">ブログ</a></li>
+            <li><a href="/photo/">ギャラリー</a></li>
           </ul>
         </div>
       </div>
@@ -63,33 +54,27 @@
     <li data-target="#myCarousel" data-slide-to="2"></li>
   </ol>
   <div class="carousel-inner">
-    <div class="item active">
-      <img data-src="holder.js/900x500/auto/#777:#7a7a7a/text:First slide" alt="First slide">
+    <div class="item active folio1">
       <div class="container">
         <div class="carousel-caption">
-          <h1>Example headline.</h1>
-          <p>Note: If you're viewing this page via a <code>file://</code> URL, the "next" and "previous" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.</p>
-          <p><a class="btn btn-lg btn-primary" href="#" role="button">Sign up today</a></p>
+          <h1>Welcome to the Show!</h1>
+          <p>How do you like your style?</p>
         </div>
       </div>
     </div>
-    <div class="item">
-      <img data-src="holder.js/900x500/auto/#666:#6a6a6a/text:Second slide" alt="Second slide">
+    <div class="item folio2">
       <div class="container">
         <div class="carousel-caption">
-          <h1>Another example headline.</h1>
-          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-          <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+          <h1>Visit our gallery!</h1>
+            <p><a class="btn btn-lg btn-primary" href="/photo/" role="button">ギャラリー</a></p>
         </div>
       </div>
     </div>
-    <div class="item">
-      <img data-src="holder.js/900x500/auto/#555:#5a5a5a/text:Third slide" alt="Third slide">
+    <div class="item folio3">
       <div class="container">
         <div class="carousel-caption">
-        <h1>One more for good measure.</h1>
-        <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-        <p><a class="btn btn-lg btn-primary" href="#" role="button">Browse gallery</a></p>
+        <h1>Book appointments online!</h1>
+            <p><a class="btn btn-lg btn-primary" href="/shobiz/" role="button">予約!</a></p>
         </div>
       </div>
     </div>
@@ -103,21 +88,18 @@
   <!-- Three columns of text below the carousel -->
   <div class="row">
     <div class="col-lg-4">
-     <img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">
-     <h2>Heading</h2>
-     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+        <center><div class="img_circle_holder">{% placeholder "CirclePhoto1" %}</div></center>
+      <div id="textbox1">{% placeholder "TextBox1" %}</div>
       <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
    </div><!-- /.col-lg-4 -->
     <div class="col-lg-4">
-      <img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">
-      <h2>Heading</h2>
-      <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+      <center><div class="img_circle_holder">{% placeholder "CirclePhoto2" %}</div><center>
+      <div id="textbox2">{% placeholder "TextBox2" %}</div>
       <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
     </div><!-- /.col-lg-4 -->
     <div class="col-lg-4">
-      <img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">
-      <h2>Heading</h2>
-      <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+      <center><div class="img_circle_holder">{% placeholder "CirclePhoto3" %}</div><center>
+      <div id="textbox3">{% placeholder "TextBox3" %}</div>
       <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
     </div><!-- /.col-lg-4 -->
   </div><!-- /.row -->
@@ -129,11 +111,10 @@
 
   <div class="row featurette">
     <div class="col-md-7">
-      <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
-      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      {% placeholder "FeatureTextBox1" %}
     </div>
     <div class="col-md-5">
-      <div class="img_holder">{% placeholder "mainphoto1" %}</div>
+        <center><div class="img_holder">{% placeholder "FeaturePhoto1" %}</div></center>
     </div>
   </div>
 
@@ -141,11 +122,10 @@
 
   <div class="row featurette">
     <div class="col-md-5">
-      <div class="img_holder">{% placeholder "mainphoto2" %}</div>
+        <center><div class="img_holder">{% placeholder "FeaturePhoto2" %}</div></center>
     </div>
     <div class="col-md-7">
-      <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      {% placeholder "FeatureTextBox2" %}
     </div>
   </div>
 
@@ -153,11 +133,10 @@
 
   <div class="row featurette">
     <div class="col-md-7">
-      <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      {% placeholder "FeatureTextBox3" %}
     </div>
     <div class="col-md-5">
-        <div class="img_holder">{% placeholder "mainphoto3" %}</div>
+        <center><div class="img_holder">{% placeholder "FeaturePhoto3" %}</div></center>
     </div>
   </div>
 
