@@ -2,5 +2,4 @@
 *.log
 *.pot
 *.pyc
-sho-site/static/*
 local_settings.py

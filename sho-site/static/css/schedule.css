@@ -1,0 +1,7 @@
+div.timeblock {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  background-color: lightgray;
+  border: thick solid green;
+}
