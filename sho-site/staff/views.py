@@ -10,10 +10,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 from shobiz.models import Customer
 from .forms import CustomerForm
 
-@method_decorator(staff_member_required)
-def dispatch(self, *args, **kwargs):
-    return super(ViewSpaceIndex, self).dispatch(*args, **kwargs)
-
 @staff_member_required
 def errorView(request, msg):
     template_name = 'staff/staff_menu_error.html'
@@ -26,7 +22,7 @@ class StaffMenuView(TemplateView):
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
-    return super(StaffMenuView, self).dispatch(*args, **kwargs)
+        return super(StaffMenuView, self).dispatch(*args, **kwargs)
 
 
 class CustomerListView(ListView):
@@ -36,7 +32,7 @@ class CustomerListView(ListView):
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
-    return super(CustomerListView, self).dispatch(*args, **kwargs)
+        return super(CustomerListView, self).dispatch(*args, **kwargs)
 
 class CustomerDetailView(DetailView):
     template_name = 'staff/customer_detail.html'
@@ -45,7 +41,7 @@ class CustomerDetailView(DetailView):
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
-    return super(CustomerDetailView, self).dispatch(*args, **kwargs)
+        return super(CustomerDetailView, self).dispatch(*args, **kwargs)
 
 class CustomerCreateView(CreateView):
     template_name = 'staff/customer_form.html'
@@ -55,7 +51,7 @@ class CustomerCreateView(CreateView):
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
-    return super(CustomerCreateView, self).dispatch(*args, **kwargs)
+        return super(CustomerCreateView, self).dispatch(*args, **kwargs)
 
 class CustomerUpdateView(UpdateView):
     template_name = 'staff/customer_form.html'
@@ -65,7 +61,7 @@ class CustomerUpdateView(UpdateView):
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
-    return super(CustomerUpdateView, self).dispatch(*args, **kwargs)
+        return super(CustomerUpdateView, self).dispatch(*args, **kwargs)
 
 class CustomerDetailByPhone(TemplateView):
     template_name = 'staff/customer_detail.html'
@@ -87,14 +83,14 @@ class CustomerDetailByPhone(TemplateView):
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
-    return super(CustomerDetailByPhone, self).dispatch(*args, **kwargs)
+        return super(CustomerDetailByPhone, self).dispatch(*args, **kwargs)
 
 class AppointmentForCustomerView(TemplateView):
     template_name = "staff/staff_booking.html"
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
-    return super(AppointmentForCustomerView, self).dispatch(*args, **kwargs)
+        return super(AppointmentForCustomerView, self).dispatch(*args, **kwargs)
 
     def get(self, request, **kwargs):
         pass
