@@ -20,15 +20,3 @@
     width: 100%;
     height: auto;
 }
-
-.img_holder {
-    width: 400px;
-    height: 400px;
-}
-
-/* resize images */
-.img_holder span img {
-    width: 100%;
-    height: auto;
-}
-
