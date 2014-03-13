@@ -1,13 +1,13 @@
 .folio1 {
-  background: url('http://localhost:8000/static/assets/1.jpg') 50% 50% no-repeat;
+  background: url('http://www.theshow.jp/static/assets/shobanner1.jpg') 50% 50% no-repeat;
 }
 
 .folio2 {
-  background: url('http://localhost:8000/static/assets/2.jpg') 50% 50% no-repeat;
+  background: url('http://www.theshow.jp/static/assets/shobanner2.jpg') 50% 50% no-repeat;
 }
 
 .folio3 {
-  background: url('http://localhost:8000/static/assets/3.jpg') 50% 50% no-repeat;
+  background: url('http://www.theshow.jp/static/assets/shobanner3.jpg') 50% 50% no-repeat;
 }
 
 .img_circle_holder {
