@@ -6,26 +6,46 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView, ListView, \
      DetailView, CreateView, UpdateView
+from django.contrib.admin.views.decorators import staff_member_required
 from shobiz.models import Customer
 from .forms import CustomerForm
 
+@method_decorator(staff_member_required)
+def dispatch(self, *args, **kwargs):
+    return super(ViewSpaceIndex, self).dispatch(*args, **kwargs)
+
+@staff_member_required
 def errorView(request, msg):
     template_name = 'staff/staff_menu_error.html'
     context = {'msg': msg}
     return render(request, template_name, context)
 
+
 class StaffMenuView(TemplateView):
     template_name = 'staff/staff_menu.html'
+
+    @method_decorator(staff_member_required)
+    def dispatch(self, *args, **kwargs):
+    return super(StaffMenuView, self).dispatch(*args, **kwargs)
+
 
 class CustomerListView(ListView):
     template_name = 'staff/customer_list.html'
     model = Customer
     context_object_name = 'customers'
 
+    @method_decorator(staff_member_required)
+    def dispatch(self, *args, **kwargs):
+    return super(CustomerListView, self).dispatch(*args, **kwargs)
+
 class CustomerDetailView(DetailView):
     template_name = 'staff/customer_detail.html'
     model = Customer
     context_object_name = 'customer'
+
+    @method_decorator(staff_member_required)
+    def dispatch(self, *args, **kwargs):
+    return super(CustomerDetailView, self).dispatch(*args, **kwargs)
 
 class CustomerCreateView(CreateView):
     template_name = 'staff/customer_form.html'
@@ -33,11 +53,19 @@ class CustomerCreateView(CreateView):
     context_object_name = 'customer'
     success_url= "/staff/"
 
+    @method_decorator(staff_member_required)
+    def dispatch(self, *args, **kwargs):
+    return super(CustomerCreateView, self).dispatch(*args, **kwargs)
+
 class CustomerUpdateView(UpdateView):
     template_name = 'staff/customer_form.html'
     model = Customer
     context_object_name = 'customer'
     success_url= "/staff/"
+
+    @method_decorator(staff_member_required)
+    def dispatch(self, *args, **kwargs):
+    return super(CustomerUpdateView, self).dispatch(*args, **kwargs)
 
 class CustomerDetailByPhone(TemplateView):
     template_name = 'staff/customer_detail.html'
@@ -57,8 +85,16 @@ class CustomerDetailByPhone(TemplateView):
             return errorView(request, msg)
         return self.render_to_response(context)
 
+    @method_decorator(staff_member_required)
+    def dispatch(self, *args, **kwargs):
+    return super(CustomerDetailByPhone, self).dispatch(*args, **kwargs)
+
 class AppointmentForCustomerView(TemplateView):
     template_name = "staff/staff_booking.html"
+
+    @method_decorator(staff_member_required)
+    def dispatch(self, *args, **kwargs):
+    return super(AppointmentForCustomerView, self).dispatch(*args, **kwargs)
 
     def get(self, request, **kwargs):
         pass
