@@ -18,8 +18,8 @@ CMS_TEMPLATES = ( # Templates for Django CMS
 )
 
 # Media and Static Files
-STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'staticroot')
+STATIC_PATH = os.path.join(PROJECT_PATH, 'mystatic')
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
