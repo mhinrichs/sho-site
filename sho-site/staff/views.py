@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView, ListView, \
      DetailView, CreateView, UpdateView
+from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
 from shobiz.models import Customer
 from .forms import CustomerForm
