@@ -1,50 +1,52 @@
-{% extends "shobiz/apo_base.html" %}
+{% extends "sho_base.html" %}
 
 {% load sekizai_tags static %}
+
+{% block styles %}
+{% addtoblock "css" %}
+<link rel="stylesheet" type="text/css" href="{% static "css/workday-calendar.css" %}"/>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+  <script src="{% static "js/djangocsrf.js" %}"></script>
+  <script src="{% static "js/calendar.js" %}"></script>
+{% endaddtoblock %}
+{% endblock %}
 
 {% block base_content %}
 
 {% comment %} <!-- Django requires csrf tokens for AJAX posts even without forms -->  {% endcomment %}
 {% csrf_token %}
 
-{% addtoblock "css" %}
-<link rel="stylesheet" type="text/css" href="{% static "css/workday-calendar.css" %}"/>
-{% endaddtoblock %}
-
-{% addtoblock "js" %}
-  <script src="{% static "js/djangocsrf.js" %}"></script>
-  <script src="{% static "js/calendar.js" %}"></script>
-{% endaddtoblock %}
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="jumbotron">
-          <h1>Book an appointment with {{ employee.name }}</h1>
-          <p>Select a date from the calendar below to see a timetable for {{ employee.name }}.</p>
-          <div class="row">
-            <div class="col-xs-12" style="text-align:center">
-              <p>
-              <a class="btn btn-primary btn-lg" role="button" id="back">&laquo; 前 </a>
-              <a class="btn btn-primary btn-lg" role="button" id="current">  今月  </a>
-              <a class="btn btn-primary btn-lg" role="button" id="next"> 次 &raquo;</a>
-              </p>
-            </div>
+<br><br><br>
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="jumbotron">
+        <h1>Book an appointment with {{ employee.name }}</h1>
+        <p>Select a date from the calendar below to see a timetable for {{ employee.name }}.</p>
+        <div class="row">
+          <div class="col-xs-12" style="text-align:center">
+            <p>
+            <a class="btn btn-primary btn-lg" role="button" id="back">&laquo; 前 </a>
+            <a class="btn btn-primary btn-lg" role="button" id="current">  今月  </a>
+            <a class="btn btn-primary btn-lg" role="button" id="next"> 次 &raquo;</a>
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div id="cal">
-          {% include "shobiz/calendar_template.html" %}
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div id="cal">
+        {% include "shobiz/calendar_template.html" %}
       </div>
     </div>
   </div>
+</div>
 
 {% endblock %}
 

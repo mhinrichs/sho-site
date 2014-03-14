@@ -1,9 +1,8 @@
-{% extends "shobiz/apo_base.html" %}
+{% extends "sho_base.html" %}
 
 {% load sekizai_tags static %}
 
 {% block base_content %}
-
 {% comment %} <!-- Django requires csrf tokens for AJAX posts even without forms -->  {% endcomment %}
 {% csrf_token %}
 
@@ -15,6 +14,8 @@
   <script src="{% static "js/djangocsrf.js" %}"></script>
   <script src="{% static "js/schedule.js" %}"></script>
 {% endaddtoblock %}
+
+<br><br><br>
 
 <div class="container">
     <div class="row">

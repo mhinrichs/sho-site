@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load cms_tags sekizai_tags static %}
+
+{% addtoblock "css"%}
+  <link rel="stylesheet" type="text/css" href="{% static "css/basepage.css" %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static "css/carousel.css" %}"/>
+{% endaddtoblock %}
+{% addtoblock "js" %}
+  <script src="{% static "js/jquery-2.0.3.min.js" %}"></script>
+  <script src="{% static "js/bootstrap.min.js" %}"></script>
+  <script src="{% static "js/holder.js" %}"></script>
+{% endaddtoblock%}
+{% block styles %}{% endblock %}
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for Hair Produce The Show">
+    <meta name="author" content="Matthew Hinrichs: 2014">
+    {% render_block "css" %}
+    <title>Hair Produce The Show</title>
+  </head>
+
+  <body>
+    {% cms_toolbar %}
+    <div class="navbar-wrapper">
+      <div class="container">
+        <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">The Show</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                  <li class="active"><a href="/">トップ</a></li>
+                <li><a href="#access">アクセス</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+                <li><a href="/shobiz/">予約</a></li>
+                <li><a href="/weblog/">ブログ</a></li>
+                <li><a href="/photo/">ギャラリー</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+	            <li><a href="{% url 'account_email' %}">メール変更</a></li>
+	            <li><a href="{% url 'account_logout' %}">ログアウト&nbsp&nbsp&nbsp&nbsp</a></li>
+	            {% else %}
+                <li><a href="{% url 'account_login' %}">ログイン／サインアップ&nbsp&nbsp&nbsp&nbsp</a></li>
+	            {% endif %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      {% block base_content %}{% endblock %}
+      {% render_block "js" %}
+  </body>
+
+</html>

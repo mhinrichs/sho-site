@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load account %}
+{% load url from future %}
+{% load static bootstrap3 %}
+{% block content %}
+
+<div class="container">
+  <h1>{% trans "Sign In" %}</h1>
+  <div class="col-lg-4 col-lg-offset-4">
+      <form class="login" method="POST" action="{% url 'account_login' %}">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      {% buttons %}
+        <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+        <button class="primaryAction btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+      {% endbuttons %}
+    </form>
+    <br>
+    <p>まだ未登録の方は<a href="{{ signup_url }}">ここ</a>をクリックしてください。<p>
+    {% if socialaccount.providers  %}
+    <p>または以下のソーシャルアカウントでログインしてください:</p>
+    <a href="/accounts/facebook/login/"><img class="img img-responsive" id="fbbutton" src="{% static "assets/fbbutton.jpg" %}"/></a>
+    {% else %}
+    <p>{% blocktrans %}If you have not created an account yet, then please
+    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

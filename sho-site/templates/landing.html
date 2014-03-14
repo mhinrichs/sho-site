@@ -1,48 +1,18 @@
-{% extends "base_page.html" %}
+{% extends "sho_base.html" %}
 {% load cms_tags sekizai_tags static %}
 
 {% block banner%}
 <div id="banner"> {% placeholder banner_content %} </div>
 {% endblock %}
 
-{% block banner_content %}
-
+{% block styles %}
 {% addtoblock "css" %}
-<link rel="stylesheet" type="text/css" href="{% static "css/landing.css" %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static "css/landing.css" %}"/>
 {% endaddtoblock %}
-
 {% addtoblock "js" %}
-<script src="{% static "js/landing.js" %}"></script>
+  <script src="{% static "js/landing.js" %}"></script>
 {% endaddtoblock %}
-
-<div class="navbar-wrapper">
-  <div class="container">
-    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">The Show</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="/shobiz/">予約</a></li>
-            <li><a href="/weblog/">ブログ</a></li>
-            <li><a href="/photo/">ギャラリー</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    </div>
-  </div>
 {% endblock %}
 
 {% block base_content %}
@@ -148,5 +118,5 @@
   <p>&copy; 2014 Hair Produce The Show, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
 </footer>
 
-  </div><!-- /.container -->
+</div><!-- /.container marketing -->
 {% endblock %}

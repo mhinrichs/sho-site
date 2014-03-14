@@ -1,9 +1,8 @@
-{% extends "shobiz/apo_base.html" %}
+{% extends "sho_base.html" %}
 
 {% load sekizai_tags static %}
 
-{% block base_content %}
-
+{% block styles %}
 {% addtoblock "css" %}
 <link rel="stylesheet" type="text/css" href="{% static "css/schedule.css" %}"/>
 {% endaddtoblock %}
@@ -11,8 +10,10 @@
 {% addtoblock "js" %}
   <script src="{% static "js/djangocsrf.js" %}"></script>
   <script src="{% static "js/schedule.js" %}"></script>
-{% endaddtoblock %}
+{% endaddtoblock %}{% endblock %}
+{% block base_content %}
 
+<br><br><br>
 <div class="container">
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
@@ -25,32 +26,30 @@
     </div>
   </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 col-md-offset-1">
-        <div id="dateinfo">
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget</p>
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-1">
+      <div id="dateinfo">
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget</p>
       </div>
-      <div class="col-md-6">
-        <p>Appointment form!</p>
-        <form id="appointment_form" method="post" action="/shobiz/appointment/" action="{{ action }}">
+    </div>
+    <div class="col-md-6">
+      <p>Appointment form!</p>
+      <form id="appointment_form" method="post" action="/shobiz/appointment/" action="{{ action }}">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
 
-          {% csrf_token %}
-          {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-          {% endfor %}
+        {% for field in form.visible_fields %}
+          {{ field.errors }}
+          {{ field.help_text}}
+          <p>{{ field }}</p>
+        {% endfor %}
 
-          {% for field in form.visible_fields %}
-            {{ field.errors }}
-            {{ field.help_text}}
-            <p>{{ field }}</p>
-          {% endfor %}
-
-          <p><input type="submit" name="submit" value="Register Appointment" /></p>
-        </form>
-      </div> <!--rightcol-->
-    </div> <!--outerrow-->
-  </div> <!--container-->
-
+        <p><input type="submit" name="submit" value="Register Appointment" /></p>
+      </form>
+    </div> <!--rightcol-->
+  </div> <!--outerrow-->
+</div> <!--container-->
 {% endblock %}
